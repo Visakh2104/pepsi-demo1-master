@@ -1,0 +1,89 @@
+header .top-header {
+    width: 100%;
+    background: #1A32EA;
+    padding: 25px 0;
+}
+header .top-header ul {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    list-style: none;
+    text-align: center;
+    padding: 0;
+    gap: 2rem;
+}
+header .top-header ul li {
+    font-size: 14px;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.45px;
+}
+
+header .main-header {
+    width: 100%;
+    display: block;
+    padding: 20px 0;
+}
+.main-header > .container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.main-header .menu-items {
+    width: auto;
+}
+.main-header ul {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+.main-header .menu-items ul li {
+    display: inline-block;
+    position: relative;
+    transition: all 0.45s ease-in;
+}
+.main-header .menu-items ul li:before {
+    content:"";
+    position:absolute;
+    width:50%;
+    height:50%;
+    background: transparent;
+    left:0;
+    right:0;
+    margin-inline: auto;
+    top: 50%;
+    transform: translateY(-50%);
+    box-shadow: 0 0 38px 20px #0000fe;
+    border-radius: 50%;
+    z-index: 0;
+    transition: all 0.45s ease-in;
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(0);
+}
+.main-header .menu-items ul li:hover:before {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+}
+.main-header .menu-items ul li a {
+    text-decoration: none;
+    font-size: 14px;
+    color: #fff;
+    line-height: 1.25;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: PepsiFont, sans-serif;
+    position: relative;
+}
+.main-header .social-icons ul {
+    gap: 1rem;
+}
