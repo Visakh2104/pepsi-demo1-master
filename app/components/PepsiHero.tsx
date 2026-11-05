@@ -197,7 +197,7 @@ useEffect(() => {
         <video
           ref={videoRef}
           className="pepsi-hero-video"
-          src="/videos/pepsi-banner-new.mp4"
+          src="/videos/pepsi-banner-1.mp4"
           muted
           playsInline
           preload="auto"
