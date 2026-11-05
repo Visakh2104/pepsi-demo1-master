@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useRef } from "react";
@@ -5,219 +6,213 @@ import Link from "next/link";
 
 export default function PepsiHero() {
   const sectionRef = useRef<HTMLElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const indicatorRef = useRef<HTMLDivElement>(null);
 
-  const targetTimeRef = useRef(0);
-  const currentTimeRef = useRef(0);
-  const isSeekingRef = useRef(false);
-  const seekTimeoutRef = useRef<NodeJS.Timeout | number>(0);
-  const isLoopRunningRef = useRef(false);
-  const rafIdRef = useRef(0);
-  const lastTimeRef = useRef(0);
+  useEffect(() => {
+    const section = sectionRef.current;
+    const canvas = canvasRef.current;
+    const indicator = indicatorRef.current;
 
-  
-useEffect(() => {
-  const section = sectionRef.current;
-  const video = videoRef.current;
-  const indicator = indicatorRef.current;
+    if (!section || !canvas) return;
 
-  if (!section || !video) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
 
-  // Smoothness settings
-  const DAMPING = 0.045;
-  const SEEK_THRESHOLD = 0.025;
-  const SEEK_INTERVAL = 50;
+    // CHANGE THIS to your actual number of frames
+    const FRAME_COUNT = 120;
 
-  let targetTime = 0;
-  let currentTime = 0;
-  let isSeeking = false;
-  let rafId = 0;
-  let lastFrameTime = 0;
-  let lastSeekTime = 0;
-  let loopRunning = false;
+    const images: HTMLImageElement[] = [];
 
-  let seekTimeout: ReturnType<typeof setTimeout>;
+    let targetFrame = 0;
+    let currentFrame = 0;
+    let rafId = 0;
+    let isRunning = false;
 
-  const calculateTarget = () => {
-    if (!video.duration || !Number.isFinite(video.duration)) return;
+    const DAMPING = 0.08;
 
-    const rect = section.getBoundingClientRect();
-    const scrollDistance = section.offsetHeight - window.innerHeight;
+    // Canvas sizing
+    const resizeCanvas = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-    if (scrollDistance <= 0) return;
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
 
-    const scrolled = Math.min(
-      Math.max(-rect.top, 0),
-      scrollDistance
-    );
+      canvas.style.width = "100%";
+      canvas.style.height = "100%";
 
-    const progress = scrolled / scrollDistance;
+      drawFrame(Math.round(currentFrame));
+    };
 
-    targetTime = Math.min(
-      progress * video.duration,
-      video.duration - 0.05
-    );
-  };
+    // Draw image with cover behavior
+    const drawFrame = (frameIndex: number) => {
+      const image = images[frameIndex];
 
-  const applySeek = (time: number) => {
-    if (!video.duration || isSeeking) return;
+      if (!image || !image.complete || !image.naturalWidth) return;
 
-    const safeTime = Math.max(
-      0,
-      Math.min(time, video.duration - 0.05)
-    );
+      const width = canvas.width;
+      const height = canvas.height;
 
-    isSeeking = true;
-    lastSeekTime = performance.now();
+      const imageRatio = image.naturalWidth / image.naturalHeight;
+      const canvasRatio = width / height;
 
-    video.currentTime = safeTime;
+      let drawWidth;
+      let drawHeight;
 
-    clearTimeout(seekTimeout);
+      if (imageRatio > canvasRatio) {
+        drawHeight = height;
+        drawWidth = height * imageRatio;
+      } else {
+        drawWidth = width;
+        drawHeight = width / imageRatio;
+      }
 
-    seekTimeout = setTimeout(() => {
-      isSeeking = false;
-      startLoop();
-    }, 150);
-  };
+      const x = (width - drawWidth) / 2;
+      const y = (height - drawHeight) / 2;
 
-  const render = (now: number) => {
-    if (!lastFrameTime) lastFrameTime = now;
+      ctx.clearRect(0, 0, width, height);
 
-    const delta = Math.min(
-      (now - lastFrameTime) / 16.67,
-      3
-    );
+      ctx.drawImage(
+        image,
+        x,
+        y,
+        drawWidth,
+        drawHeight
+      );
+    };
 
-    lastFrameTime = now;
+    // Preload image sequence
+    const preloadFrames = () => {
+      for (let i = 1; i <= FRAME_COUNT; i++) {
+        const img = new Image();
 
-    // Frame-rate independent smooth interpolation
-    const factor = 1 - Math.pow(1 - DAMPING, delta);
+        img.src = `/frames/frame_${String(i).padStart(4, "0")}.jpg`;
 
-    currentTime += (targetTime - currentTime) * factor;
+        img.onload = () => {
+          if (i === 1) {
+            drawFrame(0);
+          }
+        };
 
-    if (Math.abs(targetTime - currentTime) < 0.001) {
-      currentTime = targetTime;
-    }
+        images.push(img);
+      }
+    };
 
-    // Throttled video seeking
-    const timeSinceLastSeek = now - lastSeekTime;
+    // Calculate scroll progress
+    const calculateTarget = () => {
+      const rect = section.getBoundingClientRect();
 
-    if (
-      !isSeeking &&
-      timeSinceLastSeek >= SEEK_INTERVAL &&
-      Math.abs(video.currentTime - currentTime) > SEEK_THRESHOLD
-    ) {
-      applySeek(currentTime);
-    }
+      const scrollDistance =
+        section.offsetHeight - window.innerHeight;
 
-    // Scroll indicator
-    if (indicator && video.duration) {
-      const progress = currentTime / video.duration;
-      const opacity = Math.max(0, 1 - progress * 5);
+      if (scrollDistance <= 0) return;
 
-      indicator.style.opacity = opacity.toString();
-      indicator.style.pointerEvents =
-        opacity <= 0.01 ? "none" : "auto";
-    }
+      const scrolled = Math.min(
+        Math.max(-rect.top, 0),
+        scrollDistance
+      );
 
-    const isEasing =
-      Math.abs(targetTime - currentTime) > 0.001;
+      const progress = scrolled / scrollDistance;
 
-    const needsSync =
-      Math.abs(video.currentTime - currentTime) > SEEK_THRESHOLD;
+      targetFrame = progress * (FRAME_COUNT - 1);
 
-    if (isEasing || isSeeking || needsSync) {
-      rafId = requestAnimationFrame(render);
-    } else {
-      loopRunning = false;
-      lastFrameTime = 0;
-    }
-  };
+      if (indicator) {
+        const opacity = Math.max(0, 1 - progress * 5);
 
-  const startLoop = () => {
-    if (!loopRunning) {
-      loopRunning = true;
-      lastFrameTime = 0;
-      rafId = requestAnimationFrame(render);
-    }
-  };
+        indicator.style.opacity = opacity.toString();
 
-  const onScroll = () => {
+        indicator.style.pointerEvents =
+          opacity <= 0.01 ? "none" : "auto";
+      }
+
+      startAnimation();
+    };
+
+    // Smooth frame interpolation
+    const animate = () => {
+      currentFrame +=
+        (targetFrame - currentFrame) * DAMPING;
+
+      if (Math.abs(targetFrame - currentFrame) < 0.01) {
+        currentFrame = targetFrame;
+      }
+
+      const frameIndex = Math.round(currentFrame);
+
+      drawFrame(frameIndex);
+
+      if (Math.abs(targetFrame - currentFrame) > 0.01) {
+        rafId = requestAnimationFrame(animate);
+      } else {
+        isRunning = false;
+      }
+    };
+
+    const startAnimation = () => {
+      if (!isRunning) {
+        isRunning = true;
+        rafId = requestAnimationFrame(animate);
+      }
+    };
+
+    // Initial setup
+    preloadFrames();
+    resizeCanvas();
     calculateTarget();
-    startLoop();
-  };
 
-  const onReady = () => {
-    if (!video.duration || !Number.isFinite(video.duration)) return;
+    window.addEventListener("scroll", calculateTarget, {
+      passive: true,
+    });
 
-    video.pause();
-    calculateTarget();
+    window.addEventListener("resize", resizeCanvas);
 
-    currentTime = targetTime;
-    applySeek(currentTime);
-    startLoop();
-  };
+    return () => {
+      window.removeEventListener("scroll", calculateTarget);
+      window.removeEventListener("resize", resizeCanvas);
 
-  const onSeeked = () => {
-    isSeeking = false;
-    clearTimeout(seekTimeout);
-    startLoop();
-  };
-
-  if (video.readyState >= 1) {
-    onReady();
-  }
-
-  video.addEventListener("loadedmetadata", onReady);
-  video.addEventListener("seeked", onSeeked);
-
-  window.addEventListener("scroll", onScroll, {
-    passive: true,
-  });
-
-  window.addEventListener("resize", onScroll);
-
-  return () => {
-    cancelAnimationFrame(rafId);
-    clearTimeout(seekTimeout);
-
-    video.removeEventListener("loadedmetadata", onReady);
-    video.removeEventListener("seeked", onSeeked);
-
-    window.removeEventListener("scroll", onScroll);
-    window.removeEventListener("resize", onScroll);
-  };
-}, []);
-
+      cancelAnimationFrame(rafId);
+    };
+  }, []);
 
   return (
-    <section ref={sectionRef} className="pepsi-scroll-section">
+    <section
+      ref={sectionRef}
+      className="pepsi-scroll-section"
+    >
       <div className="pepsi-sticky-hero">
-        <video
-          ref={videoRef}
-          className="pepsi-hero-video"
-          src="/videos/pepsi-banner-1.mp4"
-          muted
-          playsInline
-          preload="auto"
-          aria-label="Pepsi product pouring animation"
+
+        <canvas
+          ref={canvasRef}
+          className="pepsi-hero-canvas"
+          aria-label="Pepsi product animation"
+          role="img"
         />
 
         <div className="hero-content-outer">
-
           <div className="pepsi-hero-content">
-            <h1>That's <span>what </span><span>i like</span></h1>
-            <p>Big taste. Real refreshment. 3g prebiotic fiber and no artificial sweeteners.</p>
-            <Link href="" className="banner-btn">Shop now</Link>
-          </div>
+            <h1>
+              That's <span>what </span>
+              <span>i like</span>
+            </h1>
 
+            <p>
+              Big taste. Real refreshment. 3g prebiotic
+              fiber and no artificial sweeteners.
+            </p>
+
+            <Link href="#" className="banner-btn">
+              Shop now
+            </Link>
+          </div>
         </div>
 
-        <div className="scroll-indicator" ref={indicatorRef}>
-            <span>SCROLL TO EXPLORE</span>
-            <span className="scroll-arrow">↓</span>
-          </div>
+        <div
+          className="scroll-indicator"
+          ref={indicatorRef}
+        >
+          <span>SCROLL TO EXPLORE</span>
+          <span className="scroll-arrow">↓</span>
+        </div>
 
       </div>
     </section>
