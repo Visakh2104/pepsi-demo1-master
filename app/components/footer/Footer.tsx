@@ -9,7 +9,7 @@ export default function Footer() {
                 width: "100%",
                 background: "#000",
                 borderTop: "1px solid rgba(255,255,255,0.08)",
-                padding: "70px 0 60px",
+                padding: "80px 0 120px",
             }}>
 
             <div className="container">

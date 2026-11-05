@@ -1,7 +1,11 @@
 footer .foot-logo {
     display: inline-block;
-    width: 114px;
+    width: 104px;
     margin: 0 0 0;
+}
+footer .foot-logo img {
+    width: 100%;
+    display: block;
 }
 footer .nav-items {
     width: calc(100% - 300px);
@@ -34,14 +38,16 @@ footer .nav-items ul {
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.75rem;
+    column-gap: 1.25rem;
     list-style: none;
 }
 footer .nav-items ul a {
-    font-size: 18px;
+    font-size: 16px;
     text-transform: uppercase;
     color: #fff;
     text-decoration: none;
+    letter-spacing: 0.75px;
 }
 footer .nav-items ul li {
     position: relative;
@@ -62,7 +68,7 @@ footer .nav-items ul li:before {
     top: 50%;
     left: 0;
     transform: scale(0);
-    box-shadow: 0 0 38px 12px #0000fe;
+    box-shadow: 0 0 30px 10px #0000fe;
 }
 footer .nav-items ul li:hover:before {
     transform: scale(1);

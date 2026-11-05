@@ -359,6 +359,9 @@ body {
   position: relative;
   overflow: hidden;
   isolation: isolate;
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
 }
 
 .home-cont1 p {

@@ -20,7 +20,7 @@ export default function PepsiHero() {
     if (!ctx) return;
 
     // CHANGE THIS to your actual number of frames
-    const FRAME_COUNT = 120;
+    const FRAME_COUNT = 590;
 
     const images: HTMLImageElement[] = [];
 
