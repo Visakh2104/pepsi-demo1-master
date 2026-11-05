@@ -16,9 +16,7 @@ export default function PepsiHero() {
   const rafIdRef = useRef(0);
   const lastTimeRef = useRef(0);
 
-
-
-
+  
 useEffect(() => {
   const section = sectionRef.current;
   const video = videoRef.current;
@@ -26,106 +24,123 @@ useEffect(() => {
 
   if (!section || !video) return;
 
+  // Smoothness settings
+  const DAMPING = 0.045;
+  const SEEK_THRESHOLD = 0.025;
+  const SEEK_INTERVAL = 50;
+
   let targetTime = 0;
   let currentTime = 0;
-
+  let isSeeking = false;
   let rafId = 0;
-  let lastFrame = 0;
-  let lastSeek = 0;
+  let lastFrameTime = 0;
+  let lastSeekTime = 0;
+  let loopRunning = false;
 
-  let seeking = false;
-  let running = false;
-
-  const SMOOTHING = 10;
-  const SEEK_INTERVAL = 40;
-  const SEEK_THRESHOLD = 0.02;
+  let seekTimeout: ReturnType<typeof setTimeout>;
 
   const calculateTarget = () => {
-    if (!Number.isFinite(video.duration) || video.duration <= 0) return;
+    if (!video.duration || !Number.isFinite(video.duration)) return;
 
     const rect = section.getBoundingClientRect();
-    const distance = section.offsetHeight - window.innerHeight;
+    const scrollDistance = section.offsetHeight - window.innerHeight;
 
-    if (distance <= 0) return;
+    if (scrollDistance <= 0) return;
 
-    const progress = Math.max(
-      0,
-      Math.min(1, -rect.top / distance)
+    const scrolled = Math.min(
+      Math.max(-rect.top, 0),
+      scrollDistance
     );
 
-    targetTime = progress * Math.max(0, video.duration - 0.05);
+    const progress = scrolled / scrollDistance;
+
+    targetTime = Math.min(
+      progress * video.duration,
+      video.duration - 0.05
+    );
   };
 
-  const seekToLatestPosition = (now: number) => {
-    if (seeking || video.seeking) return;
+  const applySeek = (time: number) => {
+    if (!video.duration || isSeeking) return;
 
-    if (now - lastSeek < SEEK_INTERVAL) return;
-
-    const difference = Math.abs(video.currentTime - currentTime);
-
-    if (difference < SEEK_THRESHOLD) return;
-
-    seeking = true;
-    lastSeek = now;
-
-    video.currentTime = Math.max(
+    const safeTime = Math.max(
       0,
-      Math.min(currentTime, video.duration - 0.05)
+      Math.min(time, video.duration - 0.05)
     );
+
+    isSeeking = true;
+    lastSeekTime = performance.now();
+
+    video.currentTime = safeTime;
+
+    clearTimeout(seekTimeout);
+
+    seekTimeout = setTimeout(() => {
+      isSeeking = false;
+      startLoop();
+    }, 150);
   };
 
   const render = (now: number) => {
-    if (!lastFrame) lastFrame = now;
+    if (!lastFrameTime) lastFrameTime = now;
 
-    const delta = Math.min((now - lastFrame) / 1000, 0.05);
-    lastFrame = now;
+    const delta = Math.min(
+      (now - lastFrameTime) / 16.67,
+      3
+    );
 
-    // Smooth interpolation
-    const factor = 1 - Math.exp(-SMOOTHING * delta);
+    lastFrameTime = now;
+
+    // Frame-rate independent smooth interpolation
+    const factor = 1 - Math.pow(1 - DAMPING, delta);
 
     currentTime += (targetTime - currentTime) * factor;
 
-    if (Math.abs(targetTime - currentTime) < 0.005) {
+    if (Math.abs(targetTime - currentTime) < 0.001) {
       currentTime = targetTime;
     }
 
-    seekToLatestPosition(now);
+    // Throttled video seeking
+    const timeSinceLastSeek = now - lastSeekTime;
 
-    if (indicator && video.duration) {
-      const progress = currentTime / video.duration;
-
-      indicator.style.opacity = String(
-        Math.max(0, 1 - progress * 5)
-      );
+    if (
+      !isSeeking &&
+      timeSinceLastSeek >= SEEK_INTERVAL &&
+      Math.abs(video.currentTime - currentTime) > SEEK_THRESHOLD
+    ) {
+      applySeek(currentTime);
     }
 
-    const needsAnimation =
-      Math.abs(targetTime - currentTime) > 0.005 ||
-      Math.abs(video.currentTime - currentTime) > SEEK_THRESHOLD ||
-      seeking;
+    // Scroll indicator
+    if (indicator && video.duration) {
+      const progress = currentTime / video.duration;
+      const opacity = Math.max(0, 1 - progress * 5);
 
-    if (needsAnimation) {
+      indicator.style.opacity = opacity.toString();
+      indicator.style.pointerEvents =
+        opacity <= 0.01 ? "none" : "auto";
+    }
+
+    const isEasing =
+      Math.abs(targetTime - currentTime) > 0.001;
+
+    const needsSync =
+      Math.abs(video.currentTime - currentTime) > SEEK_THRESHOLD;
+
+    if (isEasing || isSeeking || needsSync) {
       rafId = requestAnimationFrame(render);
     } else {
-      running = false;
-      lastFrame = 0;
+      loopRunning = false;
+      lastFrameTime = 0;
     }
   };
 
   const startLoop = () => {
-    if (running) return;
-
-    running = true;
-    lastFrame = 0;
-
-    rafId = requestAnimationFrame(render);
-  };
-
-  const onSeeked = () => {
-    seeking = false;
-
-    // Process the latest scroll position
-    startLoop();
+    if (!loopRunning) {
+      loopRunning = true;
+      lastFrameTime = 0;
+      rafId = requestAnimationFrame(render);
+    }
   };
 
   const onScroll = () => {
@@ -134,31 +149,38 @@ useEffect(() => {
   };
 
   const onReady = () => {
-    if (!Number.isFinite(video.duration) || video.duration <= 0) return;
+    if (!video.duration || !Number.isFinite(video.duration)) return;
 
     video.pause();
-
     calculateTarget();
 
     currentTime = targetTime;
-
-    seeking = false;
-
+    applySeek(currentTime);
     startLoop();
   };
 
-  video.addEventListener("loadedmetadata", onReady);
-  video.addEventListener("seeked", onSeeked);
-
-  window.addEventListener("scroll", onScroll, { passive: true });
-  window.addEventListener("resize", onScroll);
+  const onSeeked = () => {
+    isSeeking = false;
+    clearTimeout(seekTimeout);
+    startLoop();
+  };
 
   if (video.readyState >= 1) {
     onReady();
   }
 
+  video.addEventListener("loadedmetadata", onReady);
+  video.addEventListener("seeked", onSeeked);
+
+  window.addEventListener("scroll", onScroll, {
+    passive: true,
+  });
+
+  window.addEventListener("resize", onScroll);
+
   return () => {
     cancelAnimationFrame(rafId);
+    clearTimeout(seekTimeout);
 
     video.removeEventListener("loadedmetadata", onReady);
     video.removeEventListener("seeked", onSeeked);
@@ -167,8 +189,6 @@ useEffect(() => {
     window.removeEventListener("resize", onScroll);
   };
 }, []);
-
-
 
 
   return (
@@ -181,7 +201,6 @@ useEffect(() => {
           muted
           playsInline
           preload="auto"
-          disablePictureInPicture
           aria-label="Pepsi product pouring animation"
         />
 
@@ -196,9 +215,9 @@ useEffect(() => {
         </div>
 
         <div className="scroll-indicator" ref={indicatorRef}>
-          <span>SCROLL TO EXPLORE</span>
-          <span className="scroll-arrow">↓</span>
-        </div>
+            <span>SCROLL TO EXPLORE</span>
+            <span className="scroll-arrow">↓</span>
+          </div>
 
       </div>
     </section>
