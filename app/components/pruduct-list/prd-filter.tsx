@@ -70,6 +70,24 @@ export default function PrdFilter() {
                             ))}
                         </select>
                     </div>
+
+                    {/* <div className="prd-filter">
+                        <div
+                            className="prd-filter-select"
+                            name={filter.name}
+                            defaultValue={filter.options[0]}
+                        >
+                            <div className="filter-item">
+                            {filter.options.map((option) => (
+                                <div className='filter-list' key={option} value={option}>
+                                    {option}
+                                </div>
+                            ))}
+                            </div>
+
+                        </div>
+                    </div> */}
+
                 </div>
             ))}
 

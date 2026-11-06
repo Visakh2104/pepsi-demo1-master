@@ -26,7 +26,7 @@ export function HomeCont2() {
         scrollTrigger: {
           trigger: section,
           start: "top 80%",
-          end: "bottom 20%",
+          end: "bottom bottom",
           scrub: 0.8,
         },
       });
