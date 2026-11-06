@@ -8,11 +8,13 @@ export default function PepsiHero() {
   const sectionRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const indicatorRef = useRef<HTMLDivElement>(null);
+  const heroContentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const section = sectionRef.current;
     const canvas = canvasRef.current;
     const indicator = indicatorRef.current;
+    const heroContent = heroContentRef.current;
 
     if (!section || !canvas) return;
 
@@ -30,6 +32,33 @@ export default function PepsiHero() {
     let isRunning = false;
 
     const DAMPING = 0.08;
+
+    // Thresholds: hidden at first, then animate in at end of smooth scroll canvas
+    const HERO_SHOW_START = 0.78;
+    const HERO_SHOW_END = 0.92;
+
+    const updateHeroContent = (frame: number) => {
+      if (!heroContent) return;
+
+      const progress = Math.min(Math.max(frame / (FRAME_COUNT - 1), 0), 1);
+
+      let rawRatio = 0;
+      if (progress >= HERO_SHOW_END) {
+        rawRatio = 1;
+      } else if (progress > HERO_SHOW_START) {
+        rawRatio = (progress - HERO_SHOW_START) / (HERO_SHOW_END - HERO_SHOW_START);
+      }
+
+      // Smooth cubic ease-out entrance animation
+      const ease = 1 - Math.pow(1 - rawRatio, 3);
+      const opacity = ease;
+      const yOffset = (1 - ease) * 36; // Subtle 36px slide up into place
+
+      heroContent.style.opacity = opacity.toFixed(3);
+      heroContent.style.transform = `translateY(calc(-50% + ${yOffset.toFixed(1)}px))`;
+      heroContent.style.pointerEvents = opacity >= 0.85 ? "auto" : "none";
+      heroContent.style.visibility = opacity <= 0.001 ? "hidden" : "visible";
+    };
 
     // Canvas sizing
     const resizeCanvas = () => {
@@ -140,6 +169,7 @@ export default function PepsiHero() {
       const frameIndex = Math.round(currentFrame);
 
       drawFrame(frameIndex);
+      updateHeroContent(currentFrame);
 
       if (Math.abs(targetFrame - currentFrame) > 0.01) {
         rafId = requestAnimationFrame(animate);
@@ -159,16 +189,23 @@ export default function PepsiHero() {
     preloadFrames();
     resizeCanvas();
     calculateTarget();
+    currentFrame = targetFrame;
+    updateHeroContent(currentFrame);
+
+    const onResize = () => {
+      resizeCanvas();
+      calculateTarget();
+    };
 
     window.addEventListener("scroll", calculateTarget, {
       passive: true,
     });
 
-    window.addEventListener("resize", resizeCanvas);
+    window.addEventListener("resize", onResize);
 
     return () => {
       window.removeEventListener("scroll", calculateTarget);
-      window.removeEventListener("resize", resizeCanvas);
+      window.removeEventListener("resize", onResize);
 
       cancelAnimationFrame(rafId);
     };
@@ -188,7 +225,10 @@ export default function PepsiHero() {
           role="img"
         />
 
-        <div className="hero-content-outer">
+        <div
+          ref={heroContentRef}
+          className="hero-content-outer"
+        >
           <div className="pepsi-hero-content">
             <h1>
               That's <span>what </span>

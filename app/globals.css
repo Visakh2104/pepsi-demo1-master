@@ -49,6 +49,10 @@ body {
     left: 0;
     right: 0;
     margin-inline: auto;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    will-change: opacity, transform, visibility;
 }
 
 .pepsi-hero-content {
@@ -76,17 +80,8 @@ body {
   display: block;
 }
 
-.pepsi-scroll-section .hero-content-outer {
-    width: 100%;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    max-width: 1340px;
-    left: 0;
-    right: 0;
-    margin-inline: auto;
-}
 .pepsi-hero-content .banner-btn {
+    pointer-events: auto;
     font-family: PepsiFont;
     text-decoration: none;
     font-size: 19px;
