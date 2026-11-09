@@ -5,6 +5,8 @@
     justify-content: center;
     gap: 2.45%;
     margin: 3rem 0 6rem;
+    position: relative;
+    z-index: 2;
 }
 .product-list-wrapp .prd-filter-row .prft-col1 {
     width: 18%;
@@ -40,6 +42,7 @@
     -webkit-appearance: none;
     appearance: none;
     text-align: left;
+    outline: none;
 }
 .product-list-wrapp .prd-filter .prd-filter-select::placeholder {
     color:#fff;
@@ -61,9 +64,72 @@
 .product-list-wrapp .prd-filter input.prd-filter-select {
 
 }
-.product-list-wrapp .prd-filter select.prd-filter-select {
+.product-list-wrapp .prd-filter button.prd-filter-select {
     cursor: pointer;
     background: #1c1b1b url('/images/icons/drop-arrow.svg')no-repeat;
     background-position: right 13px center;
     background-size: 12px;
+}
+
+@keyframes dropListMove {
+    0% {
+        transform:translateY(50px);
+    }
+    100% {
+        transform:translateY(0);
+    }
+}
+.product-list-wrapp .prd-filter .select-list {
+    position: absolute;
+    width: 100%;
+    transform: translateY(50px);
+    transition: all 0.5s ease-in-out;
+}
+.product-list-wrapp .prd-filter button.prd-filter-select[aria-expanded="true"] + .select-list {
+    animation: 1.2s dropListMove;
+    transform: none;
+}
+.product-list-wrapp .prd-filter button.prd-filter-select[aria-expanded="true"] + .select-list {
+    transform: none;
+}
+.product-list-wrapp .prd-filter .select-list .prdt-list {
+    text-align: left;
+    background: #1c1b1b;
+    border: 1px solid #3c3c3c;
+    border-radius: 10px;
+}
+.product-list-wrapp .prd-filter .select-list .prdt-list .prdt-item {
+    width: 100%;
+    text-align: left;
+    padding: 12px;
+    font-size: 16px;
+    color: #fff;
+    border-radius: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    transition: all 0.3s ease-in;
+    position: relative;
+}
+.product-list-wrapp .prd-filter .select-list .prdt-list .prdt-item:hover {
+    padding-left:22px;
+}
+
+.product-list-wrapp .prd-filter .select-list .prdt-list .prdt-item:before {
+    content:"";
+    position:absolute;
+    left: 4px;
+    width:3px;
+    height: calc(100% - 20px);
+    background:#0000fe;
+    top: 10px;
+    border-radius: 5px;
+    transition: all 0.35s ease-in;
+    opacity: 0;
+    visibility: hidden;
+}
+.product-list-wrapp .prd-filter .select-list .prdt-list .prdt-item:hover:before {
+    opacity:1;
+    visibility:visible;
+    left:12px;
 }

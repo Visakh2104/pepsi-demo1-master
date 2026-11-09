@@ -6,22 +6,26 @@ import Image from 'next/image';
 export default function PrdFilter() {
 
     const filters = [
-        {
+        {   
+            titlePlaceholder: "All Brands",
             title: "Brand",
             name: "brand",
             options: ["All Brands", "Pepsi", "Diet Pepsi", "Pepsi Zero Sugar", "Pepsi Wild Cherry"]
         },
-        {
+        {   
+            titlePlaceholder: "All Types",
             title: "Type",
             name: "type",
             options: ["All Types", "Pepsi", "Diet Pepsi", "Pepsi Zero Sugar", "Pepsi Wild Cherry"]
         },
         {
+            titlePlaceholder: "All Serving Sizes",
             title: "Serving Size",
             name: "size",
             options: ["All Serving Sizes", "250ml", "330ml", "500ml", "1L", "2L"]
         },
         {
+            titlePlaceholder: "Price High to Low",
             title: "Sort By",
             name: "sort",
             options: ["Price High to Low", "Price Low to High", "Newest", "Popular"]
@@ -68,7 +72,7 @@ export default function PrdFilter() {
                 <div className="prft-col1 col-md-2" key={filter.name}>
                     <h3>{filter.title}</h3>
 
-                    <div className="prd-filter">
+                    {/* <div className="prd-filter">
                         <select
                             className="prd-filter-select"
                             name={filter.name}
@@ -80,7 +84,7 @@ export default function PrdFilter() {
                                 </option>
                             ))}
                         </select>
-                    </div>
+                    </div> */}
 
                     <div className="filter-col">
 
@@ -88,7 +92,7 @@ export default function PrdFilter() {
                         options={brandTypes}
                         value={brand}
                         onChange={setBrand}
-                        placeholder="Choose a brand"
+                        placeholder={filter.titlePlaceholder}
                     />
 
                     </div>

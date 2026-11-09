@@ -368,6 +368,7 @@ body {
     margin: 0 0 1rem;
     text-align: center;
     will-change: transform, opacity;
+    line-height: 1.35;
 }
 
 .home-cont1 .container {
@@ -570,6 +571,7 @@ body {
     margin: 0 0 1rem;
     text-align: center;
     will-change: transform, opacity;
+    line-height: 1.35;
 }
 .home-cont-wrapp .container {
     padding-inline: 5%;
