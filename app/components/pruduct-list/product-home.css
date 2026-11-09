@@ -39,6 +39,7 @@
     color: #fff;
     -webkit-appearance: none;
     appearance: none;
+    text-align: left;
 }
 .product-list-wrapp .prd-filter .prd-filter-select::placeholder {
     color:#fff;

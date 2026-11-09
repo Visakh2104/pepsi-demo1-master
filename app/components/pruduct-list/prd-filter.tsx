@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import AnimatedDropdown from '../animatedDrop/AnimatedDropdown';
 import './product-home.css';
 import Image from 'next/image';
 
@@ -25,6 +27,15 @@ export default function PrdFilter() {
             options: ["Price High to Low", "Price Low to High", "Newest", "Popular"]
         }
     ];
+
+    const brandTypes = [
+        { value: "pepsi", label: "Pepsi" },
+        { value: "diet-pepsi", label: "Diet Pepsi" },
+        { value: "pepsi-zero-sugar", label: "Pepsi Zero Sugar" },
+        { value: "pepsi-wild-cherry", label: "Pepsi Wild Cherry" },
+    ];
+
+    const [brand, setBrand] = useState("");
 
     return (
         <div className="prd-filter-row row">
@@ -71,22 +82,16 @@ export default function PrdFilter() {
                         </select>
                     </div>
 
-                    {/* <div className="prd-filter">
-                        <div
-                            className="prd-filter-select"
-                            name={filter.name}
-                            defaultValue={filter.options[0]}
-                        >
-                            <div className="filter-item">
-                            {filter.options.map((option) => (
-                                <div className='filter-list' key={option} value={option}>
-                                    {option}
-                                </div>
-                            ))}
-                            </div>
+                    <div className="filter-col">
 
-                        </div>
-                    </div> */}
+                    <AnimatedDropdown
+                        options={brandTypes}
+                        value={brand}
+                        onChange={setBrand}
+                        placeholder="Choose a brand"
+                    />
+
+                    </div>
 
                 </div>
             ))}

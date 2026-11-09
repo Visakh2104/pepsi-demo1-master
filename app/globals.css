@@ -96,6 +96,7 @@ body {
     background: #0000FE;
     overflow: hidden;
     z-index: 1;
+    position: relative;
 }
 .pepsi-hero-content .banner-btn:before {
   content: "";
