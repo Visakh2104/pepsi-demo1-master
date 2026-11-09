@@ -11,14 +11,16 @@ export default function SmoothScroll() {
 
     // Initialize Lenis for buttery-smooth momentum scrolling
     const lenis = new Lenis({
-      duration: 1.2,
+      duration: 1.0,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: "vertical",
       gestureOrientation: "vertical",
       smoothWheel: true,
-      wheelMultiplier: 0.9,
+      wheelMultiplier: 1.0,
       touchMultiplier: 1.5,
     });
+
+    (window as any).__lenis = lenis;
 
     // Synchronize Lenis with GSAP ScrollTrigger
     lenis.on("scroll", ScrollTrigger.update);
@@ -31,6 +33,7 @@ export default function SmoothScroll() {
     gsap.ticker.lagSmoothing(0);
 
     return () => {
+      delete (window as any).__lenis;
       gsap.ticker.remove(updateTicker);
       lenis.destroy();
     };
