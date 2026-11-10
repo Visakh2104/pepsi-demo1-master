@@ -14,11 +14,11 @@ export default function DeliveryPickupPage() {
     <SmoothScroll />
     <Header />
     <main className="delivery-page">
-      <section className="delivery-hero" aria-labelledby="delivery-title">
-        <div className="delivery-hero__inner">
-          <h2>Delivery or warehouse pick up</h2>
-        </div>
-      </section>
+        <section className="inner-banner-hero">
+            <div className="banner-inner">
+                <h2>Delivery or warehouse pick up</h2>
+            </div>
+        </section>
 
       <div className="delivery-content">
 

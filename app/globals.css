@@ -160,6 +160,33 @@ body {
   }
 }
 
+
+.inner-banner-hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: clamp(118px, 11vw, 190px);
+  isolation: isolate;
+  overflow: hidden;
+  background:url('/images/inner-bannerbg.jpg') no-repeat center center;
+}
+
+.inner-banner-hero h2 {
+  text-align: center;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  margin: 0 0 0;
+  font-family: PepsiFont, pepsifont, sans-serif;
+  font-size: clamp(38px, 4.5vw, 62px);
+  font-weight: 700;
+}
+
+.banner-inner {
+  width: min(100% - 48px, 1500px);
+  margin: 0 auto;
+}
+
 @media (max-width: 767px) {
   .pepsi-scroll-section {
     height: 320vh;

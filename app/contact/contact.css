@@ -1,0 +1,145 @@
+.contact-page {
+  min-height: 70vh;
+  background: #000;
+  color: #fff;
+  overflow: hidden;
+}
+
+
+
+.contact-content {
+  text-align: center;
+  width: 100%;
+  margin: 0 auto;
+  padding: 60px 0;
+}
+
+.contact-content h2 {
+    color: #fff;
+    letter-spacing: -1px;
+    text-transform: uppercase;
+    margin: 0 0 40px;
+    font-family: PepsiFont, pepsifont, sans-serif;
+    font-size: clamp(28px, 3.4vw, 40px);
+    font-weight: 900;
+    line-height: 1.45;
+}
+
+.contact-service-area {
+  margin: 0 0 28px;
+  color: #fff;
+  font-size: clamp(19px, 2.35vw, 31px);
+  line-height: 1.28;
+  font-weight: 900;
+  letter-spacing: -.45px;
+}
+
+.contact-map {
+  background: #171717;
+  border: 1px solid #ffffff1f;
+  border-radius: 13px;
+  width: min(100%, 701px);
+  height: 437px;
+  overflow: hidden;
+  margin: 0 auto 50px;
+}
+
+.contact-map iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.contact-details {
+  width: 100%;
+  margin-top: 30px;
+}
+
+.contact-detail-row {
+  display: flex;
+  justify-content: center;
+  text-align: left;
+  column-gap: 20px;
+}
+
+.contact-content p {
+    color: #f5f5f5;
+    margin: 0 0 30px;
+    font-family: Inter, sans-serif;
+    font-size: clamp(15px, 1.2vw, 20px);
+    font-weight: 600;
+    line-height: 1.8;
+    font-family: HelveticaFont, sans-serif;
+}
+
+.contact-content p a {
+    color: #f5f5f5;
+    text-decoration: none;
+    font-family: HelveticaFont, sans-serif;
+}
+
+.contact-detail-row svg {
+  flex: 0 0 22px;
+  width: 22px;
+  height: 22px;
+  fill: #fff;
+  position: relative;
+  top: 7px;
+}
+
+.contact-detail-row a:hover,
+.contact-email a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.contact-email {
+  margin: 22px 0 0;
+  color: #fff;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.contact-email a {
+  color: #fff;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 600px) {
+  .contact-hero { min-height: 105px; }
+
+  .contact-content {
+    width: min(100% - 32px, 1100px);
+    padding: 42px 0 58px;
+  }
+
+  .contact-service-area {
+    margin-bottom: 22px;
+    font-size: clamp(17px, 4.5vw, 23px);
+  }
+
+  .contact-map {
+    height: 245px;
+    border-radius: 10px;
+  }
+
+  .contact-details { margin-top: 25px; }
+
+  .contact-details h2 {
+    margin-bottom: 19px;
+    font-size: clamp(19px, 5vw, 25px);
+  }
+
+  .contact-detail-row { gap: 12px; }
+
+  .contact-detail-row p,
+  .contact-detail-row a { font-size: 15px; }
+
+  .contact-email {
+    max-width: 420px;
+    margin: 20px auto 0;
+    font-size: 13px;
+  }
+}
