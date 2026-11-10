@@ -79,7 +79,7 @@ export default function ProductsPage() {
 
                 <main className="products-page-main">
                     <div className="products-container product-list-wrapp">
-                        <h1 className="products-main-title">OUR PRODUCTS</h1>
+                        <h2>Our Products</h2>
 
                         <PrdFilter
                             values={filters}
