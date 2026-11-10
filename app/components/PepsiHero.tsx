@@ -111,20 +111,27 @@ export default function PepsiHero() {
     // Get closest loaded frame to prevent blank frames or freezes during rapid scroll
     const getLoadedImage = (index: number): HTMLImageElement | null => {
       const exact = images[index];
-      if (exact && exact.complete && exact.naturalWidth > 0) return exact;
 
-      for (let offset = 1; offset <= 25; offset++) {
+      if (exact?.complete && exact.naturalWidth > 0) {
+        return exact;
+      }
+
+      // Find the nearest available frame
+      for (let offset = 1; offset <= 10; offset++) {
         const prev = images[index - offset];
-        if (prev && prev.complete && prev.naturalWidth > 0) return prev;
+
+        if (prev?.complete && prev.naturalWidth > 0) {
+          return prev;
+        }
+
         const next = images[index + offset];
-        if (next && next.complete && next.naturalWidth > 0) return next;
+
+        if (next?.complete && next.naturalWidth > 0) {
+          return next;
+        }
       }
 
-      if (lastRenderedIndex >= 0 && images[lastRenderedIndex]?.complete) {
-        return images[lastRenderedIndex];
-      }
-
-      return images[0] || null;
+      return null;
     };
 
     // Draw frame onto canvas
@@ -132,10 +139,14 @@ export default function PepsiHero() {
       if (frameIndex === lastRenderedIndex && !force) return;
 
       const image = getLoadedImage(frameIndex);
-      if (!image || !image.complete || !image.naturalWidth) return;
+
+      if (!image) return;
 
       ctx.imageSmoothingEnabled = true;
-      ctx.imageSmoothingQuality = "medium";
+      ctx.imageSmoothingQuality = "high";
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
       ctx.drawImage(
         image,
         drawParams.x,
@@ -149,20 +160,35 @@ export default function PepsiHero() {
 
     // Load single frame
     const loadFrame = (index: number): Promise<void> => {
-      if (index < 0 || index >= FRAME_COUNT) return Promise.resolve();
-      if (requested.has(index)) return Promise.resolve();
+      if (index < 0 || index >= FRAME_COUNT) {
+        return Promise.resolve();
+      }
+
+      if (requested.has(index)) {
+        return Promise.resolve();
+      }
+
       requested.add(index);
 
       return new Promise((resolve) => {
         const img = new Image();
+
         img.onload = () => {
           images[index] = img;
-          if (index === 0 && lastRenderedIndex === -1) {
-            drawFrame(0, true);
+
+          // Immediately render if this is the currently requested frame
+          if (
+            Math.abs(targetFrame - index) < 1.5 &&
+            !isDisposed
+          ) {
+            drawFrame(index, true);
           }
+
           resolve();
         };
+
         img.onerror = () => resolve();
+
         img.src = `/frames/frame_${String(index + 1).padStart(4, "0")}.jpg`;
       });
     };
@@ -221,20 +247,28 @@ export default function PepsiHero() {
       if (scrollDistance <= 0) return;
 
       const scrollY = window.scrollY || window.pageYOffset;
+
       const scrolled = Math.min(
         Math.max(scrollY - sectionTop, 0),
         scrollDistance
       );
 
       const progress = scrolled / scrollDistance;
+
       targetFrame = progress * (FRAME_COUNT - 1);
 
-      prioritizeAround(targetFrame);
+      const frameIndex = Math.round(targetFrame);
+
+      // Prioritize the current frame and nearby frames
+      prioritizeAround(frameIndex);
 
       if (indicator) {
         const opacity = Math.max(0, 1 - progress * 5);
+
         indicator.style.opacity = opacity.toString();
-        indicator.style.pointerEvents = opacity <= 0.01 ? "none" : "auto";
+
+        indicator.style.pointerEvents =
+          opacity <= 0.01 ? "none" : "auto";
       }
 
       startAnimation();
@@ -242,30 +276,23 @@ export default function PepsiHero() {
 
     // Smooth and responsive frame interpolation
     const animate = () => {
-      const diff = targetFrame - currentFrame;
+      isRunning = false;
 
-      if (Math.abs(diff) < 0.05) {
-        currentFrame = targetFrame;
-      } else {
-        currentFrame += diff * DAMPING;
-      }
+      currentFrame = targetFrame;
 
       const frameIndex = Math.round(currentFrame);
-      drawFrame(frameIndex);
-      updateHeroContent(currentFrame);
 
-      if (Math.abs(targetFrame - currentFrame) >= 0.05) {
-        rafId = requestAnimationFrame(animate);
-      } else {
-        isRunning = false;
-      }
+      drawFrame(frameIndex);
+
+      updateHeroContent(currentFrame);
     };
 
     const startAnimation = () => {
-      if (!isRunning) {
-        isRunning = true;
-        rafId = requestAnimationFrame(animate);
-      }
+      if (isRunning) return;
+
+      isRunning = true;
+
+      rafId = requestAnimationFrame(animate);
     };
 
     // Initial setup
