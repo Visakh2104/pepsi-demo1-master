@@ -1,0 +1,60 @@
+.pepsi-floating-cart {
+    position: fixed;
+    bottom: 36px;
+    left: 36px;
+    z-index: 999;
+    width: 65px;
+    height: 65px;
+    background-color: #0000FE;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-shadow: 0 10px 25px rgba(0, 0, 254, 0.45);
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+}
+
+.pepsi-floating-cart:hover {
+    transform: scale(1.08) translateY(-2px);
+    box-shadow: 0 14px 30px rgba(0, 0, 254, 0.6);
+}
+
+.pepsi-floating-cart .cart-icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pepsi-floating-cart .cart-badge-count {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 22px;
+    height: 22px;
+    background-color: #ffffff;
+    color: #000000;
+    font-size: 13px;
+    font-weight: 700;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+    font-family: 'HelveticaFont', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+@media (max-width: 768px) {
+    .pepsi-floating-cart {
+        bottom: 24px;
+        left: 20px;
+        width: 56px;
+        height: 56px;
+    }
+    .pepsi-floating-cart .cart-badge-count {
+        width: 20px;
+        height: 20px;
+        font-size: 12px;
+    }
+}

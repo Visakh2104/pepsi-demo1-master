@@ -109,21 +109,24 @@ useGSAP(
         >
             <div className="container">
                 <div className="foot-logo">
-                    <Image
-                        src="/images/icons/header-logo.svg"
-                        alt="Pepsi Logo"
-                        width={114}
-                        height={114}
-                        sizes="(max-width: 768px) 80vw, 25vw"
-                        style={{ objectFit: "contain" }}
-                    />
+                    <Link href="/">
+                        <Image
+                            src="/images/icons/header-logo.svg"
+                            alt="Pepsi Logo"
+                            width={114}
+                            height={114}
+                            sizes="(max-width: 768px) 80vw, 25vw"
+                            style={{ objectFit: "contain" }}
+                        />
+                    </Link>
                 </div>
 
                 <div className="nav-items">
                     <div className="nav-item-col1">
                         <h4>Quick Links</h4>
                         <ul>
-                            <li><a href="">Home</a></li>
+                            <li><Link href="/">Home</Link></li>
+                            <li><Link href="/products">Products</Link></li>
                             <li><a href="">Contact</a></li>
                             <li><a href="">About us</a></li>
                         </ul>

@@ -17,19 +17,21 @@ export default function Header() {
             <div className="main-header">
                 <div className="container">
                     <div className="head-logo">
-                        <Image
-                            src={'/images/icons/header-logo.svg'}
-                            alt={'Pepsi Logo'}
-                            width={70}
-                            height={70}
-                            sizes="(max-width: 768px) 80vw, 25vw"
-                            style={{ objectFit: "contain" }}
-                        />
+                        <Link href="/">
+                            <Image
+                                src={'/images/icons/header-logo.svg'}
+                                alt={'Pepsi Logo'}
+                                width={70}
+                                height={70}
+                                sizes="(max-width: 768px) 80vw, 25vw"
+                                style={{ objectFit: "contain" }}
+                            />
+                        </Link>
                     </div>
                     <div className="menu-items">
                         <ul>
-                            <li><Link href="">Home</Link></li>
-                            <li><Link href="">Products</Link></li>
+                            <li><Link href="/">Home</Link></li>
+                            <li><Link href="/products">Products</Link></li>
                             <li><Link href="">Delivery/Pick up</Link></li>
                             <li><Link href="">Contact</Link></li>
                             <li><Link href="">About</Link></li>

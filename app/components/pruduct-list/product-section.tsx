@@ -8,39 +8,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import Link from "next/link";
 
-interface Product {
-    id: number;
-    name: string;
-    desc: string;
-    image: string;
-}
-
-const products: Product[] = [
-    {
-        id: 1, name: "Pepsi1", image: "/images/pepsi-can1.png",
-        desc: "Refreshing Cola with a Smooth Cherry Twist",
-    },
-    {
-        id: 2, name: "Pepsi2", image: "/images/pepsi-can2.png",
-        desc: "Moments Worth Savouring"
-    },
-    {
-        id: 3, name: "Pepsi3", image: "/images/pepsi-can3.png",
-        desc: "Zero Sugar , All the Pepsi Taste"
-    },
-    {
-        id: 4, name: "Pepsi4", image: "/images/pepsi-can4.png",
-        desc: "Refreshing Cola with a Smooth Cherry Twist"
-    },
-    {
-        id: 5, name: "Pepsi5", image: "/images/pepsi-can5.png",
-        desc: "Moments Worth Savouring"
-    },
-    {
-        id: 6, name: "Pepsi6", image: "/images/pepsi-can6.png",
-        desc: "Zero Sugar , All the Pepsi Taste"
-    },
-];
+import { productsData } from "../../data/products";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -125,7 +93,7 @@ export default function ProductSection() {
     return (
         <div ref={sectionRef} className="product-section">
             <div className="product-grid">
-                {products.map((product) => (
+                {productsData.map((product) => (
                     <div className="product-col1" key={product.id}>
                         <div className="product-img">
                             <Image
@@ -141,7 +109,7 @@ export default function ProductSection() {
                         <div className="product-cont">
                             <h4>{product.name}</h4>
                             <p>{product.desc}</p>
-                            <Link href="" className="prdt-btn">Find out more</Link>
+                            <Link href="/products" className="prdt-btn">FIND OUT MORE</Link>
                         </div>
                     </div>
                 ))}
