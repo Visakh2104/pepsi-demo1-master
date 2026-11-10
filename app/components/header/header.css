@@ -11,7 +11,7 @@ header .top-header ul {
     list-style: none;
     text-align: center;
     padding: 0;
-    gap: 2rem;
+    gap: 2.1rem;
 }
 header .top-header ul li {
     font-size: 14px;
