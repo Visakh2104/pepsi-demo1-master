@@ -1,31 +1,3 @@
-@font-face {
-  font-family: 'PepsiFont';
-  src: url('/fonts/Pepsi-regular.woff') format('woff');
-  font-weight: 400;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'PepsiFont';
-  src: url('/fonts/Pepsi-shrink.woff') format('woff');
-  font-weight: 700;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'pepsifont';
-  src: url('/fonts/Pepsi-regular.woff') format('woff');
-  font-weight: 400;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'pepsifont';
-  src: url('/fonts/Pepsi-shrink.woff') format('woff');
-  font-weight: 700;
-  font-style: normal;
-}
-
 header .top-header {
     width: 100%;
     background: #1A32EA;
@@ -112,13 +84,13 @@ header .main-header .head-logo img {
     transform: scale(1);
 }
 .main-header .menu-items ul li a {
-    text-decoration: none;
-    font-size: 14px;
     color: #fff;
-    line-height: 1.25;
     text-transform: uppercase;
+    font-family: PepsiFont, sans-serif;
+    font-size: 14px;
     font-weight: 700;
-    /* font-family: PepsiFont, sans-serif; */
+    line-height: 1.25;
+    text-decoration: none;
     position: relative;
 }
 .main-header .social-icons ul {
