@@ -579,6 +579,11 @@ header .main-header .head-logo img {
     box-shadow: 0 0 20px #0000feb3;
     filter: none;
 }
+
+.main-header .nav-drawer .social-icons .search-item, .main-header .nav-drawer .search-panel {
+    display: none;
+}
+
 .main-header .social-icons .search-item, .main-header .search-panel {
     display: block;
 }
