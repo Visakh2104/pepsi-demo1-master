@@ -206,32 +206,6 @@ body {
 }
 
 
-@media (max-width: 767px) {
-  .pepsi-scroll-section {
-    height: 320vh;
-  }
-
-  .pepsi-hero-video {
-    object-position: center;
-  }
-
-  .pepsi-hero-content {
-    left: 6%;
-    right: 6%;
-    top: 20%;
-    transform: none;
-  }
-
-  .pepsi-hero-content p {
-    font-size: 12px;
-  }
-
-  .pepsi-hero-content h1 {
-    font-size: 42px;
-  }
-}
-
-
 /* prdt-list */
 
 .product-list-wrapp {
@@ -798,4 +772,41 @@ html.lenis, html.lenis body {
 
 .lenis.lenis-stopped {
   overflow: hidden;
+}
+
+@media (max-width: 1440px) {
+  .container {width: 94%;}
+  .pepsi-scroll-section .hero-content-outer {width:90%;}
+}
+
+@media (max-width: 1199px) {}
+
+@media (max-width: 1024px) {}
+
+@media (max-width: 992px) {}
+
+
+@media (max-width: 767px) {
+  .pepsi-scroll-section {
+    height: 320vh;
+  }
+
+  .pepsi-hero-video {
+    object-position: center;
+  }
+
+  .pepsi-hero-content {
+    left: 6%;
+    right: 6%;
+    top: 20%;
+    transform: none;
+  }
+
+  .pepsi-hero-content p {
+    font-size: 12px;
+  }
+
+  .pepsi-hero-content h1 {
+    font-size: 42px;
+  }
 }
