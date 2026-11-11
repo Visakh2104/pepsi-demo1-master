@@ -60,23 +60,22 @@ header .main-header .head-logo img {
     transition: all 0.45s ease-in;
 }
 .main-header .menu-items ul li:before {
-    content:"";
-    position:absolute;
-    width:50%;
-    height:50%;
-    background: transparent;
-    left:0;
-    right:0;
-    margin-inline: auto;
-    top: 50%;
-    transform: translateY(-50%);
-    box-shadow: 0 0 38px 20px #0000fe;
-    border-radius: 50%;
+    content: "";
     z-index: 0;
-    transition: all 0.45s ease-in;
     opacity: 0;
     visibility: hidden;
+    background: none;
+    border-radius: 50%;
+    width: 20%;
+    height: 0%;
+    margin-inline: auto;
+    transition: all .45s ease-in;
+    position: absolute;
+    top: 50%;
+    left: 0;
     transform: scale(0);
+    box-shadow: 0 0 30px 10px #0000fe;
+    animation: hoverMoves 2s ease-in-out infinite;
 }
 .main-header .menu-items ul li:hover:before {
     opacity: 1;
