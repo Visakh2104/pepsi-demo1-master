@@ -148,6 +148,21 @@
     .product-list-wrapp .product-grid .prdt-btn {
         font-size: clamp(14px, 1.5vw, 18px);
     }
+    .home-cont-wrapp h2 {
+        font-size: clamp(30px, 4vw, 64px);
+    }
+    .home-cont1 p {
+        font-size: clamp(14px, 4vw, 22px);
+    }
+    .home-cont-wrapp p {
+        font-size: clamp(14px, 4vw, 22px);
+    }
+    .home-cont-wrapp {
+        padding: 100px 0 80px;
+    }
+    .home-cont1 {
+        padding: 100px 0 100px;
+    }
 }
 
 @media (max-width: 991px) {
