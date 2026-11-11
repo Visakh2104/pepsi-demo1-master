@@ -49,6 +49,10 @@
   padding:60px 0;
 }
 
+.delivery-content + .product-mini-wrapp {
+    padding-top: 0;
+}
+
 .delivery-content h2 {
   margin: 0 0 40px;
   color: #fff;

@@ -14,6 +14,10 @@
   padding: 60px 0;
 }
 
+.contact-content + .product-mini-wrapp {
+    padding-top: 0;
+}
+
 .contact-content h2 {
     color: #fff;
     letter-spacing: -1px;
