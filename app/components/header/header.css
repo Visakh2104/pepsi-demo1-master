@@ -143,9 +143,10 @@ header .main-header .head-logo img {
         border: 0;
         border-radius: 12px;
         cursor: pointer;
-        position: relative;
         z-index: 1002;
         transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+        position: fixed;
+        right: 3%;
     }
     .main-header .menu-toggle:hover {
         box-shadow: 0 0 22px rgba(0, 0, 254, 0.7);
@@ -228,7 +229,7 @@ header .main-header .head-logo img {
 
     /* Close button inside drawer */
     .main-header .drawer-close {
-        display: block;
+        display: none;
         position: absolute;
         top: 22px;
         right: 22px;
@@ -402,6 +403,7 @@ header .main-header .head-logo img {
     transform: translateY(-14px);
     transition: opacity 0.35s ease, transform 0.35s ease, visibility 0s linear 0.35s;
     z-index: 999;
+    border-top:1px solid #393939;
 }
 .main-header .search-panel.is-open {
     opacity: 1;
@@ -428,12 +430,13 @@ header .main-header .head-logo img {
     border: 1px solid #3c3c3c;
     background: #1c1b1b;
     color: #fff;
-    padding: 16px 18px;
+    padding: 14px 18px;
     border-radius: 10px;
     font-size: 16px;
     font-family: Inter, sans-serif;
     outline: none;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow:none;
 }
 .main-header .search-form input:focus,
 .main-header .mobile-search input:focus {
@@ -446,16 +449,17 @@ header .main-header .head-logo img {
 }
 .main-header .search-submit,
 .main-header .mobile-search button {
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    cursor: pointer;
     background: #0000fe;
     border: 1px solid #0000fe;
-    border-radius: 10px;
-    padding: 0 18px;
-    cursor: pointer;
-    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    border-radius: 50%;
+    flex-shrink: 0;
+    justify-content: center;
+    align-items: center;
+    padding: 0 13px;
+    transition: box-shadow .3s, transform .3s;
+    display: flex;
+    height: 48px;
 }
 .main-header .search-submit:hover,
 .main-header .mobile-search button:hover {
@@ -468,8 +472,8 @@ header .main-header .head-logo img {
 .main-header .search-close {
     position: relative;
     flex-shrink: 0;
-    width: 42px;
-    height: 42px;
+    width: 48px;
+    height: 48px;
     background: transparent;
     border: 1px solid #3c3c3c;
     border-radius: 50%;
@@ -514,9 +518,10 @@ header .main-header .head-logo img {
         display: flex;
         flex: 1;
         min-width: 0;
-        margin: 0 14px;
+        margin: 0 auto;
         gap: 8px;
         order: 0;
+        max-width: calc(80% - 160px);
     }
     .main-header .mobile-search input {
         padding: 12px 14px;
@@ -526,6 +531,12 @@ header .main-header .head-logo img {
         padding: 0 14px;
     }
 }
+@media (max-width: 767px) {
+    .main-header .mobile-search {
+        max-width: clamp(60%, 2vw, 600px);
+    }
+}
+
 
 @media (max-width: 480px) {
     /* On very small screens the search bar moves to its own full-width row */
