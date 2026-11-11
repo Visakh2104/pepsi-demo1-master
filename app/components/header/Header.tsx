@@ -134,6 +134,48 @@ export default function Header() {
                         </button>
                     </form>
 
+                    <div className="social-icons mob">
+                        <ul>
+                            {SOCIALS.map((s, i) => (
+                                <li
+                                    key={s.icon}
+                                    className={s.isSearch ? "search-item" : undefined}
+                                    style={{ ["--i" as string]: MENU.length + i } as React.CSSProperties}
+                                >
+                                    {s.isSearch ? (
+                                        <button
+                                            type="button"
+                                            className={`search-trigger${searchOpen ? " is-active" : ""}`}
+                                            aria-label={searchOpen ? "Close search" : "Open search"}
+                                            aria-expanded={searchOpen}
+                                            aria-controls="desktop-search"
+                                            onClick={() => setSearchOpen((v) => !v)}
+                                        >
+                                            <Image
+                                                src={`/images/icons/${s.icon}`}
+                                                alt=""
+                                                width={19}
+                                                height={19}
+                                                style={{ objectFit: "contain" }}
+                                            />
+                                        </button>
+                                    ) : (
+                                        <Link href="" aria-label={s.label}>
+                                            <Image
+                                                src={`/images/icons/${s.icon}`}
+                                                alt={s.label}
+                                                width={19}
+                                                height={19}
+                                                sizes="(max-width: 768px) 80vw, 25vw"
+                                                style={{ objectFit: "contain" }}
+                                            />
+                                        </Link>
+                                    )}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
                     {/* Dark overlay behind the drawer (mobile only) */}
                     <div
                         className={`nav-overlay${open ? " is-open" : ""}`}

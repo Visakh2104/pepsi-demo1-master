@@ -35,6 +35,10 @@ header .main-header .head-logo img {
     height: 90px;
 }
 
+.main-header .social-icons.mob {
+    display: none;
+}
+
 .main-header > .container {
     display: flex;
     flex-wrap: wrap;
@@ -60,23 +64,23 @@ header .main-header .head-logo img {
     transition: all 0.45s ease-in;
 }
 .main-header .menu-items ul li:before {
-    content:"";
-    position:absolute;
-    width:50%;
-    height:50%;
-    background: transparent;
-    left:0;
-    right:0;
-    margin-inline: auto;
-    top: 50%;
-    transform: translateY(-50%);
-    box-shadow: 0 0 38px 20px #0000fe;
-    border-radius: 50%;
+    content: "";
     z-index: 0;
-    transition: all 0.45s ease-in;
     opacity: 0;
     visibility: hidden;
+    background: none;
+    border-radius: 50%;
+    width: 10%;
+    height: 0%;
+    margin-inline: auto;
+    transition: all .45s ease-in;
+    position: absolute;
+    top: 50%;
+    left: 0;
     transform: scale(0);
+    box-shadow: 0 0 30px 10px #0000fe;
+    animation: hoverMoves 3s ease-in-out infinite;
+    will-change: transform;
 }
 .main-header .menu-items ul li:hover:before {
     opacity: 1;
@@ -535,6 +539,54 @@ header .main-header .head-logo img {
     .main-header .mobile-search {
         max-width: clamp(60%, 2vw, 600px);
     }
+}
+
+@media (max-width: 576px) {
+    .main-header .mobile-search{
+        display: none;
+    }
+
+    .main-header .social-icons.mob {
+    display: block;
+    width: auto;
+    margin: 0 60px 0 0;
+}
+.main-header .social-icons.mob li {
+    display: none;
+}
+.main-header .social-icons.mob li.search-item {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+}
+.main-header .social-icons.mob .search-trigger {
+    cursor: pointer;
+    background: #0000fe;
+    border: 1px solid #0000fe;
+    border-radius: 50%;
+    flex-shrink: 0;
+    justify-content: center;
+    align-items: center;
+    height: 48px;
+    padding: 0 13px;
+    transition: box-shadow .3s, transform .3s;
+    display: flex;
+    outline: none;
+}
+.main-header .social-icons.mob .search-trigger:hover, .main-header .social-icons.mob .search-trigger.is-active {
+    transform: none;
+    box-shadow: 0 0 20px #0000feb3;
+    filter: none;
+}
+.main-header .social-icons .search-item, .main-header .search-panel {
+    display: block;
+}
+.main-header .search-submit, .main-header .mobile-search button {
+    position: absolute;
+    right: 60px;
+    border-radius: 7px;
+}
 }
 
 
