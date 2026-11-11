@@ -7,6 +7,7 @@ import Header from "../components/header/Header";
 import Footer from "../components/footer/Footer";
 import SmoothScroll from "../components/SmoothScroll";
 import "./contact.css";
+import ProductMini from "../components/product-mini/ProductMini";
 
 export default function ContactPage() {
   return (
@@ -66,6 +67,7 @@ export default function ContactPage() {
           </div>
 
         </section>
+        <ProductMini />
       </main>
       <Footer />
     </>

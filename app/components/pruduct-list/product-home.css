@@ -84,7 +84,7 @@
     top: 100%;
     left: 0;
     width: 100%;
-    margin-top: 6px;
+    margin-top: 0;
     z-index: 100;
     transform: translateY(15px);
     transition: all 0.3s ease-in-out;

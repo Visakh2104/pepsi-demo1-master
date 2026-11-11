@@ -34,7 +34,7 @@ export default function Header() {
                             <li><Link href="/products">Products</Link></li>
                             <li><Link href="/delivery">Delivery/Pick up</Link></li>
                             <li><Link href="/contact">Contact</Link></li>
-                            <li><Link href="">About</Link></li>
+                            <li><Link href="/about">About</Link></li>
                         </ul>
                     </div>
                     <div className="social-icons">

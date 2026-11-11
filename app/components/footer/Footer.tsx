@@ -127,8 +127,8 @@ useGSAP(
                         <ul>
                             <li><Link href="/">Home</Link></li>
                             <li><Link href="/products">Products</Link></li>
-                            <li><a href="">Contact</a></li>
-                            <li><a href="">About us</a></li>
+                            <li><Link href="/contact">Contact</Link></li>
+                            <li><Link href="/about">About us</Link></li>
                         </ul>
                     </div>
 
