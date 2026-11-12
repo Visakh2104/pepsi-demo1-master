@@ -98,9 +98,15 @@
     position: relative;
 }
 
+.product-mini-wrapp .product-col1 img {
+  filter: drop-shadow(0 0 0 rgba(0, 0, 0, 0));
+  animation: bottleLift1 1.8s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
+  will-change: transform;
+}
+
 .product-mini-wrapp .product-col1:hover img {
-  animation: bottleLift 1.8s ease-in-out infinite alternate;
-  filter: drop-shadow(0 20px 20px rgba(0, 0, 0, 0.15));
+  filter: drop-shadow(0 20px 20px #00000026);
+  transform: scale(1.015);
 }
 
 .product-mini-wrapp .product-cont {

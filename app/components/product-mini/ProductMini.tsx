@@ -27,7 +27,7 @@ export default function ProductMini() {
             const cards = gsap.utils.toArray<HTMLElement>(".product-col1", section);
 
             cards.forEach((card, index) => {
-                const image = card.querySelector<HTMLImageElement>(".product-img img");
+                const image = card.querySelector<HTMLImageElement>(".product-img");
                 const title = card.querySelector<HTMLElement>(".product-cont");
                 if (!image || !title) return;
 

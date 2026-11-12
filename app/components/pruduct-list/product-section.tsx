@@ -27,7 +27,7 @@ export default function ProductSection() {
 
             cards.forEach((card, index) => {
                 const image =
-                    card.querySelector<HTMLImageElement>(".product-img img");
+                    card.querySelector<HTMLImageElement>(".product-img");
                 const title =
                     card.querySelector<HTMLElement>(".product-cont");
 

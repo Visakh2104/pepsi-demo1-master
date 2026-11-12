@@ -104,7 +104,6 @@ useGSAP(
                 width: "100%",
                 background: "#000",
                 borderTop: "1px solid rgba(255,255,255,0.08)",
-                padding: "80px 0 120px",
             }}
         >
             <div className="container">
@@ -144,11 +143,6 @@ useGSAP(
                     <div className="nav-item-col1">
                         <h4>Social</h4>
                         <ul>
-                            <li>
-                                <Link href="">
-                                    <Image src="/images/icons/search-icon.svg" alt="Search" width={19} height={19} />
-                                </Link>
-                            </li>
                             <li>
                                 <Link href="">
                                     <Image src="/images/icons/cart-icon.svg" alt="Cart" width={19} height={19} />

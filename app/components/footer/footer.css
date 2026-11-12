@@ -1,12 +1,18 @@
+footer {
+    padding: 80px 0 120px;
+}
+
 footer .foot-logo {
     display: inline-block;
     width: 104px;
     margin: 0 0 0;
 }
+
 footer .foot-logo img {
     width: 100%;
     display: block;
 }
+
 footer .nav-items {
     width: calc(100% - 300px);
     display: grid;
@@ -14,10 +20,12 @@ footer .nav-items {
     margin-left: auto;
     gap: 2rem;
 }
-footer > .container {
+
+footer>.container {
     display: flex;
     flex-wrap: wrap;
 }
+
 footer .nav-items h4 {
     color: #fff;
     will-change: transform, opacity;
@@ -28,10 +36,12 @@ footer .nav-items h4 {
     font-size: 20px;
     font-weight: 700;
 }
+
 footer .nav-items .nav-item-col1 {
     width: 100%;
     text-align: left;
 }
+
 footer .nav-items ul {
     width: 100%;
     margin: 0;
@@ -42,17 +52,21 @@ footer .nav-items ul {
     column-gap: 1.25rem;
     list-style: none;
 }
+
 footer .nav-items ul a {
     font-size: 16px;
     text-transform: uppercase;
     color: #fff;
     text-decoration: none;
     letter-spacing: 0.75px;
+    position: relative;
 }
+
 footer .nav-items ul li {
     position: relative;
     transition: all .45s ease-in;
 }
+
 footer .nav-items ul li:before {
     content: "";
     z-index: 0;
@@ -70,12 +84,86 @@ footer .nav-items ul li:before {
     transform: scale(0);
     box-shadow: 0 0 30px 10px #0000fe;
 }
+
 footer .nav-items ul li:hover:before {
     transform: scale(1);
     opacity: 1;
     visibility: visible;
 }
+
 footer .nav-items ul:has(img) {
     flex-wrap: wrap;
     flex-direction: row;
+}
+
+
+@media (max-width: 1024px) {
+    footer .nav-items h4 {
+        font-size: clamp(14px, 4vw, 20px);
+    }
+
+    footer .nav-items ul a {
+        font-size: clamp(14px, 4.5vw, 16px);
+    }
+
+    footer .nav-items {
+        width: calc(100% - 150px);
+        gap: 1.5rem;
+    }
+
+    footer .foot-logo {
+        width: 92px;
+    }
+}
+
+
+@media (max-width: 992px) {
+    footer .nav-items {
+        grid-template-columns: 1fr 1fr;
+        row-gap: 2.2rem;
+    }
+
+}
+
+@media (max-width: 767px) {
+
+    footer .nav-items h4 {
+        font-size: clamp(14px, 3.5vw, 18px);
+    }
+
+    footer {
+        padding: 60px 0 100px;
+    }
+
+    footer>.container {
+        flex-direction: column;
+    }
+
+    footer .foot-logo {
+        margin: 0 auto 30px;
+    }
+
+    footer .nav-items {
+        width: 100%;
+        grid-template-columns: 1fr;
+    }
+
+    footer .nav-items .nav-item-col1 {
+        text-align: center;
+    }
+
+    footer .nav-items ul {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    footer .nav-items ul li {
+        width: auto;
+    }
+
+    footer .nav-items ul a {
+        font-size: 14px;
+    }
 }
