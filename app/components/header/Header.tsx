@@ -8,11 +8,24 @@ import "./header.css";
 
 const MENU = [
     { label: "Home", href: "/" },
-    { label: "Products", href: "/products" },
+    { label: "Products", href: "/products", dropdown: true },
     { label: "Delivery/Pick up", href: "/delivery" },
     { label: "Contact", href: "/contact" },
     { label: "About", href: "/about" },
 ];
+
+// Dummy product list for the "Products" dropdown: swap the names, links and images for real ones
+const PRODUCTS = [
+    { name: "Pepsi", href: "/products" },
+    { name: "Diet Pepsi", href: "/products" },
+    { name: "Pepsi Zero Sugar", href: "/products" },
+    { name: "Pepsi Wild Cherry", href: "/products" },
+    { name: "Pepsi Prebiotic Cola", href: "/products" },
+    { name: "Mountain Dew", href: "/products" },
+    { name: "7UP", href: "/products" },
+    { name: "Mug Root Beer", href: "/products" },
+];
+const PRODUCT_IMAGE = "/images/pepsi-can1.png";
 
 const SOCIALS = [
     { icon: "search-icon.svg", label: "Search", isSearch: true },
@@ -200,15 +213,44 @@ export default function Header() {
                                 {MENU.map((item, i) => (
                                     <li
                                         key={item.href}
+                                        className={item.dropdown ? "has-dropdown" : undefined}
                                         style={{ ["--i" as string]: i } as React.CSSProperties}
                                     >
-                                        <Link
-                                            href={item.href}
-                                            className={pathname === item.href ? "active" : ""}
-                                            onClick={() => setOpen(false)}
-                                        >
-                                            {item.label}
-                                        </Link>
+                                        <div className="dd-trigger">
+                                            <Link
+                                                href={item.href}
+                                                className={pathname === item.href ? "active" : ""}
+                                                onClick={() => setOpen(false)}
+                                            >
+                                                {item.label}
+                                            </Link>
+                                        </div>
+
+                                        {/* Full-width dropdown: opens on hover / keyboard focus (desktop only) */}
+                                        {item.dropdown && (
+                                            <div className="products-dropdown">
+                                                <div className="container">
+                                                    <ul className="products-list">
+                                                        {PRODUCTS.map((p) => (
+                                                            <li key={p.name}>
+                                                                <Link href={p.href} onClick={() => setOpen(false)}>
+                                                                    <span className="product-thumb">
+                                                                        <Image
+                                                                            src={PRODUCT_IMAGE}
+                                                                            alt=""
+                                                                            width={56}
+                                                                            height={56}
+                                                                            style={{ objectFit: "contain" }}
+                                                                        />
+                                                                    </span>
+                                                                    <span className="product-name">{p.name}</span>
+                                                                </Link>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        )}
                                     </li>
                                 ))}
                             </ul>

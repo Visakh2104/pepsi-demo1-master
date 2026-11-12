@@ -606,3 +606,134 @@ header .main-header .head-logo img {
         margin: 0;
     }
 }
+
+/* ===================== Products dropdown (desktop) ===================== */
+
+/* The li is static so the panel is positioned against .main-header = full screen width */
+.main-header .menu-items ul li.has-dropdown {
+    position: static;
+}
+.main-header .menu-items ul li.has-dropdown:before {
+    display: none;
+}
+.main-header .dd-trigger {
+    position: relative;
+    display: inline-block;
+}
+.main-header .dd-trigger:before {
+    content: "";
+    z-index: 0;
+    opacity: 0;
+    visibility: hidden;
+    border-radius: 50%;
+    width: 10%;
+    height: 0%;
+    margin-inline: auto;
+    transition: all .45s ease-in;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: scale(0);
+    box-shadow: 0 0 30px 10px #0000fe;
+    animation: hoverMoves 3s ease-in-out infinite;
+    will-change: transform;
+}
+.main-header .has-dropdown:hover .dd-trigger:before,
+.main-header .has-dropdown:focus-within .dd-trigger:before {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+}
+
+.main-header .products-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: #070707;
+    border-top: 1px solid #393939;
+    border-bottom: 1px solid #1c1b1b;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-14px);
+    /* small close delay so the cursor can travel from the link to the panel */
+    transition: opacity 0.3s ease 0.15s, transform 0.3s ease 0.15s, visibility 0s linear 0.45s;
+    z-index: 998;
+}
+.main-header .has-dropdown:hover .products-dropdown,
+.main-header .has-dropdown:focus-within .products-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s;
+}
+.main-header .products-dropdown .container {
+    display: block;
+}
+.main-header .products-dropdown ul.products-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px 24px;
+    padding: 32px 0;
+    margin: 0;
+    list-style: none;
+}
+.main-header .products-dropdown ul.products-list li {
+    display: block;
+    transition: none;
+}
+.main-header .products-dropdown ul.products-list li:before {
+    display: none;
+}
+.main-header .products-dropdown ul.products-list li a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    color: #fff;
+    text-transform: uppercase;
+    font-family: PepsiFont, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+.main-header .products-dropdown ul.products-list li a:hover,
+.main-header .products-dropdown ul.products-list li a:focus-visible {
+    background: radial-gradient(circle at 100% 0, #0000fe14, #0000fe73 85%), #0000fe14;
+    transform: translateX(4px);
+    outline: none;
+}
+.main-header .product-thumb {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+}
+.main-header .product-thumb img {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* Mobile uses the slide-in drawer, so the dropdown is hidden there */
+@media (max-width: 991px) {
+    .main-header .products-dropdown {
+        display: none;
+    }
+    .main-header .menu-items ul li.has-dropdown .dd-trigger {
+        display: block;
+    }
+    .main-header .dd-trigger:before {
+        display: none;
+    }
+}
+@media (max-width: 1199px) and (min-width: 992px) {
+    .main-header .products-dropdown ul.products-list {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
