@@ -841,12 +841,12 @@ html.lenis, html.lenis body {
 
   .pepsi-scroll-section,
   .pepsi-scroll-section.is-mobile {
-    height: 40svh;
+    height: 50svh;
   }
   .pepsi-sticky-hero {
     top: 0;
     height: 100vh;
-    height: 40svh;
+    height: 50svh;
   }
   .pepsi-hero-video {
     object-position: 50% 60%;
