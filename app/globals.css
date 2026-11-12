@@ -576,13 +576,14 @@ body {
   width: 100%;
   display: block;
   padding: 210px 0 180px;
-  background: url(../public/images/contn-bg-2.jpg)no-repeat 100%;
+  background: url(../public/images/contn-bg-2.jpg)center / cover no-repeat fixed;
   background-size: 100%;
   position: relative;
   overflow: hidden;
   isolation: isolate;
   will-change: transform;
-  inset: -12% 0;
+  background-size: cover;
+  /* inset: -12% 0; */
 }
 .home-cont-wrapp h2 {
     font-size: 64px;
