@@ -1,0 +1,14 @@
+.home-cont1 .homecont-video {
+    width: 100%;
+    position: absolute;
+    height: 100%;
+    top: 0;
+    right: 0;
+    left: 0;
+}
+
+.home-cont1 .homecont-video iframe {
+    width: 100%;
+    height: 100%;
+    transform: scale(1.65);
+}

@@ -5,6 +5,7 @@ import { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import './homeCont1.css'
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -71,6 +72,15 @@ export default function HomeCont1() {
         className="home-cont1__flow"
         aria-hidden="true"
       />
+
+      <div className="homecont-video">
+        <iframe
+          src="https://www.youtube.com/embed/UZZ5s_qhHMA?autoplay=1&mute=1&loop=1&controls=0&playlist=UZZ5s_qhHMA&modestbranding=1&rel=0&iv_load_policy=3&disablekb=1"
+          frameborder="0"
+          allow="autoplay; encrypted-media"
+          allowfullscreen
+        ></iframe>
+      </div>
 
       <div className="container">
         <p>
