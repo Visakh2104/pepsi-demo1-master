@@ -254,6 +254,7 @@ body {
   object-fit: contain;
   transition: all 0.25s ease-in;
   position: relative;
+  cursor: pointer;
 }
 
 .product-list-wrapp .product-grid .product-col1 .product-img:before {
