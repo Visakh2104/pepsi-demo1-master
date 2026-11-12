@@ -1,15 +1,73 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
+// Screens at or below this width autoplay the video instead of scrubbing it with scroll
+const MOBILE_QUERY = "(max-width: 767px)";
+
+type Mode = "pending" | "mobile" | "desktop";
+
 export default function PepsiHero() {
+  const [mode, setMode] = useState<Mode>("pending");
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const indicatorRef = useRef<HTMLDivElement>(null);
   const heroContentRef = useRef<HTMLDivElement>(null);
 
+  // Detect mobile / desktop (and react when the screen is resized or rotated)
   useEffect(() => {
+    const mq = window.matchMedia(MOBILE_QUERY);
+    const update = () => setMode(mq.matches ? "mobile" : "desktop");
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  // MOBILE: autoplay the video in a loop, no scroll scrubbing
+  useEffect(() => {
+    if (mode !== "mobile") return;
+    const video = videoRef.current;
+    const heroContent = heroContentRef.current;
+    const indicator = indicatorRef.current;
+    if (!video) return;
+
+    // Hero text is always visible on mobile
+    if (heroContent) {
+      heroContent.style.opacity = "1";
+      heroContent.style.transform = "translateY(-50%)";
+      heroContent.style.visibility = "visible";
+      heroContent.style.pointerEvents = "auto";
+    }
+    if (indicator) indicator.style.opacity = "0";
+
+    video.muted = true; // required for autoplay (React does not always set the DOM property)
+    video.loop = true;
+    video.playsInline = true;
+
+    const tryPlay = () => video.play().catch(() => {
+      // Autoplay blocked (e.g. iOS Low Power Mode): start on the first touch instead
+      const startOnTouch = () => video.play().catch(() => {});
+      window.addEventListener("touchstart", startOnTouch, { once: true, passive: true });
+    });
+
+    video.currentTime = 0;
+    tryPlay();
+
+    // Pause while the tab is hidden to save battery
+    const onVisibility = () => (document.hidden ? video.pause() : tryPlay());
+    document.addEventListener("visibilitychange", onVisibility);
+
+    return () => {
+      document.removeEventListener("visibilitychange", onVisibility);
+      video.pause();
+      video.loop = false;
+    };
+  }, [mode]);
+
+  // DESKTOP: scrub the video with the page scroll (original behaviour)
+  useEffect(() => {
+    if (mode !== "desktop") return;
     const section = sectionRef.current;
     const video = videoRef.current;
     const indicator = indicatorRef.current;
@@ -196,10 +254,10 @@ export default function PepsiHero() {
         lenis.off("scroll", onScroll);
       }
     };
-  }, []);
+  }, [mode]);
 
   return (
-    <section ref={sectionRef} className="pepsi-scroll-section">
+    <section ref={sectionRef} className={`pepsi-scroll-section is-${mode}`}>
       <div className="pepsi-sticky-hero">
         <video
           ref={videoRef}

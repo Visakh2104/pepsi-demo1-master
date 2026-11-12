@@ -839,16 +839,21 @@ html.lenis, html.lenis body {
     width: 90%;
   }
 
-
-  .pepsi-scroll-section {
-    height: 100vh;
+  .pepsi-scroll-section,
+  .pepsi-scroll-section.is-mobile {
+    height: 40svh;
   }
   .pepsi-sticky-hero {
-    height: 100%;
+    top: 0;
+    height: 100vh;
+    height: 40svh;
+  }
+  .pepsi-hero-video {
+    object-position: 50% 60%;
   }
 
-  .pepsi-hero-video {
-    object-position: center;
+  .scroll-indicator {
+    display: none;
   }
 
   .pepsi-hero-content {
@@ -856,10 +861,15 @@ html.lenis, html.lenis body {
     right: 6%;
     top: 20%;
     transform: none;
+    text-align: center;
+  }
+
+  .pepsi-hero-content h1 span {
+    display: inline-block;
   }
 
   .pepsi-hero-content p {
-    font-size: 12px;
+    line-height: 1.6;
   }
 
   .pepsi-hero-content h1 {
@@ -885,5 +895,24 @@ html.lenis, html.lenis body {
     padding: 65px 0 55px;
   }
 
+  .pepsi-sticky-hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(at 20%, #c8002df2 0%, #8c0037a6 28%, #0000 55%), radial-gradient(at 80%, #0014d2f2 0%, #1e0078b3 32%, #0000 58%), linear-gradient(110deg, #50001e, #310039 50%, #00095c);
+    opacity: 0.35;
+  }
+  .pepsi-scroll-section .hero-content-outer {
+    z-index: 1;
+  }
+  .pepsi-hero-content .banner-btn{
+    font-size: 16px;
+  }
 
+}
+
+@media (max-width: 480px) {
+    .pepsi-scroll-section {
+      height: 200svh;
+    }
 }
