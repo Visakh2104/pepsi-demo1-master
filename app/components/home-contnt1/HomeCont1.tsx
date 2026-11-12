@@ -78,9 +78,9 @@ export default function HomeCont1() {
       <div className="homecont-video">
         <iframe
           src="https://www.youtube.com/embed/UZZ5s_qhHMA?autoplay=1&mute=1&loop=1&controls=0&playlist=UZZ5s_qhHMA&modestbranding=1&rel=0&iv_load_policy=3&disablekb=1"
-          frameborder="0"
+          frameBorder="0"
           allow="autoplay; encrypted-media"
-          allowfullscreen
+          allowFullScreen
         ></iframe>
       </div>
 
