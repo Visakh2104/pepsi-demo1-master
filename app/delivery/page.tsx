@@ -9,6 +9,7 @@ import SmoothScroll from "../components/SmoothScroll";
 import "./delivery.css";
 import ProductMini from "../components/product-mini/ProductMini";
 import PageLoader from "../components/PageLoader";
+import FloatingCart from "../components/FloatingCart";
 
 export default function DeliveryPickupPage() {
   return (
@@ -69,6 +70,7 @@ export default function DeliveryPickupPage() {
       </div>
       <ProductMini />
     </main>
+    <FloatingCart count={2} />
     <Footer />
     </>
   );

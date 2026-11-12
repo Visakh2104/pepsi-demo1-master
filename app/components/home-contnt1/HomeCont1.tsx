@@ -23,11 +23,12 @@ export default function HomeCont1() {
       );
 
       // Reveal paragraphs and float the gradient as you scroll.
+
       const timeline = gsap.timeline({
         scrollTrigger: {
           trigger: section,
-          start: "top 90%",
-          end: "bottom 10%",
+          start: "top 75%", // Animation starts earlier
+          end: "bottom 40%",
           scrub: 0.8,
         },
       });
@@ -60,8 +61,9 @@ export default function HomeCont1() {
             stagger: 0.15,
             ease: "power2.out",
           },
-          0.15
+          -0.3
         );
+
     },
     { scope: sectionRef }
   );

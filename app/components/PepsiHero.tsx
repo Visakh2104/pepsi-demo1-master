@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useRef } from "react";
@@ -6,350 +5,214 @@ import Link from "next/link";
 
 export default function PepsiHero() {
   const sectionRef = useRef<HTMLElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const indicatorRef = useRef<HTMLDivElement>(null);
   const heroContentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const section = sectionRef.current;
-    const canvas = canvasRef.current;
+    const video = videoRef.current;
     const indicator = indicatorRef.current;
     const heroContent = heroContentRef.current;
 
-    if (!section || !canvas) return;
+    if (!section || !video) return;
 
-    const ctx = canvas.getContext("2d", { alpha: false });
-    if (!ctx) return;
-
-    const FRAME_COUNT = 590;
-    const images: HTMLImageElement[] = new Array(FRAME_COUNT);
-    const requested = new Set<number>();
-    let lastRenderedIndex = -1;
-
-    let targetFrame = 0;
-    let currentFrame = 0;
-    let rafId = 0;
-    let isRunning = false;
-
-    // Responsive damping: fast and stable tracking without lag or stutter
-    const DAMPING = 0.22;
-
-    // Thresholds for hero text & CTA animation
+    // Scroll-to-video smoothing. Increase slightly for more responsiveness;
+    // decrease for a softer glide (too low can make the video feel delayed).
+    const DAMPING = 0.16;
+    // The full 19-second source video is used; duration is read from video metadata.
     const HERO_SHOW_START = 0.78;
     const HERO_SHOW_END = 0.92;
 
     let sectionTop = 0;
     let scrollDistance = 0;
-    let drawParams = { x: 0, y: 0, width: 0, height: 0 };
+    let targetTime = 0;
+    let currentTime = 0;
+    let rafId = 0;
+    let isRunning = false;
+    let lastFrameTime = 0;
+    let isDisposed = false;
+
+    const clamp = (value: number, min: number, max: number) =>
+      Math.min(Math.max(value, min), max);
 
     const updateGeometry = () => {
       const rect = section.getBoundingClientRect();
-      const scrollY = window.scrollY || window.pageYOffset;
-      sectionTop = rect.top + scrollY;
-      scrollDistance = section.offsetHeight - window.innerHeight;
+      sectionTop = rect.top + window.scrollY;
+      scrollDistance = Math.max(0, section.offsetHeight - window.innerHeight);
     };
 
-    const updateHeroContent = (frame: number) => {
+    const updateHeroContent = (progress: number) => {
       if (!heroContent) return;
 
-      const progress = Math.min(Math.max(frame / (FRAME_COUNT - 1), 0), 1);
-
-      let rawRatio = 0;
-      if (progress >= HERO_SHOW_END) {
-        rawRatio = 1;
-      } else if (progress > HERO_SHOW_START) {
-        rawRatio = (progress - HERO_SHOW_START) / (HERO_SHOW_END - HERO_SHOW_START);
-      }
-
-      // Smooth cubic ease-out entrance animation
-      const ease = 1 - Math.pow(1 - rawRatio, 3);
-      const opacity = ease;
-      const yOffset = (1 - ease) * 36; // Subtle 36px slide up into place
-
-      heroContent.style.opacity = opacity.toFixed(3);
-      heroContent.style.transform = `translateY(calc(-50% + ${yOffset.toFixed(1)}px))`;
-      heroContent.style.pointerEvents = opacity >= 0.85 ? "auto" : "none";
-      heroContent.style.visibility = opacity <= 0.001 ? "hidden" : "visible";
-    };
-
-    // Canvas sizing and cover parameters
-    const resizeCanvas = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-      const w = window.innerWidth;
-      const h = window.innerHeight;
-
-      canvas.width = Math.round(w * dpr);
-      canvas.height = Math.round(h * dpr);
-
-      canvas.style.width = "100%";
-      canvas.style.height = "100%";
-
-      const imageRatio = 3840 / 2160;
-      const canvasRatio = canvas.width / canvas.height;
-
-      let drawWidth: number;
-      let drawHeight: number;
-
-      if (imageRatio > canvasRatio) {
-        drawHeight = canvas.height;
-        drawWidth = canvas.height * imageRatio;
-      } else {
-        drawWidth = canvas.width;
-        drawHeight = canvas.width / imageRatio;
-      }
-
-      drawParams = {
-        x: (canvas.width - drawWidth) / 2,
-        y: (canvas.height - drawHeight) / 2,
-        width: drawWidth,
-        height: drawHeight,
-      };
-
-      drawFrame(Math.round(currentFrame), true);
-    };
-
-    // Get closest loaded frame to prevent blank frames or freezes during rapid scroll
-    const getLoadedImage = (index: number): HTMLImageElement | null => {
-      const exact = images[index];
-
-      if (exact?.complete && exact.naturalWidth > 0) {
-        return exact;
-      }
-
-      // Find the nearest available frame
-      for (let offset = 1; offset <= 10; offset++) {
-        const prev = images[index - offset];
-
-        if (prev?.complete && prev.naturalWidth > 0) {
-          return prev;
-        }
-
-        const next = images[index + offset];
-
-        if (next?.complete && next.naturalWidth > 0) {
-          return next;
-        }
-      }
-
-      return null;
-    };
-
-    // Draw frame onto canvas
-    const drawFrame = (frameIndex: number, force = false) => {
-      if (frameIndex === lastRenderedIndex && !force) return;
-
-      const image = getLoadedImage(frameIndex);
-
-      if (!image) return;
-
-      ctx.imageSmoothingEnabled = true;
-      ctx.imageSmoothingQuality = "high";
-
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      ctx.drawImage(
-        image,
-        drawParams.x,
-        drawParams.y,
-        drawParams.width,
-        drawParams.height
+      const rawRatio = clamp(
+        (progress - HERO_SHOW_START) / (HERO_SHOW_END - HERO_SHOW_START),
+        0,
+        1
       );
+      const ease = 1 - Math.pow(1 - rawRatio, 3);
+      const yOffset = (1 - ease) * 36;
 
-      lastRenderedIndex = frameIndex;
+      heroContent.style.opacity = ease.toFixed(3);
+      heroContent.style.transform = `translateY(calc(-50% + ${yOffset.toFixed(1)}px))`;
+      heroContent.style.pointerEvents = ease >= 0.85 ? "auto" : "none";
+      heroContent.style.visibility = ease <= 0.001 ? "hidden" : "visible";
     };
 
-    // Load single frame
-    const loadFrame = (index: number): Promise<void> => {
-      if (index < 0 || index >= FRAME_COUNT) {
-        return Promise.resolve();
+    const updateScrollTarget = () => {
+      if (scrollDistance <= 0) {
+        targetTime = 0;
+        return;
       }
-
-      if (requested.has(index)) {
-        return Promise.resolve();
-      }
-
-      requested.add(index);
-
-      return new Promise((resolve) => {
-        const img = new Image();
-
-        img.onload = () => {
-          images[index] = img;
-
-          // Immediately render if this is the currently requested frame
-          if (
-            Math.abs(targetFrame - index) < 1.5 &&
-            !isDisposed
-          ) {
-            drawFrame(index, true);
-          }
-
-          resolve();
-        };
-
-        img.onerror = () => resolve();
-
-        img.src = `/frames/frame_${String(index + 1).padStart(4, "0")}.jpg`;
-      });
-    };
-
-    // Prioritize loading frames ahead of current scroll direction
-    const prioritizeAround = (frameIdx: number) => {
-      const start = Math.max(0, Math.floor(frameIdx) - 4);
-      const end = Math.min(FRAME_COUNT - 1, Math.floor(frameIdx) + 16);
-      for (let i = start; i <= end; i++) {
-        if (!requested.has(i)) {
-          loadFrame(i);
-        }
-      }
-    };
-
-    // Smart progressive frame loader
-    let isDisposed = false;
-    const preloadFrames = async () => {
-      // 1. Initial frame
-      await loadFrame(0);
-      if (isDisposed) return;
-
-      // 2. Keyframes every 6th frame to cover the entire scroll distance immediately
-      const keyframeIndices: number[] = [];
-      for (let i = 0; i < FRAME_COUNT; i += 6) {
-        if (i !== 0) keyframeIndices.push(i);
-      }
-      if (!keyframeIndices.includes(FRAME_COUNT - 1)) {
-        keyframeIndices.push(FRAME_COUNT - 1);
-      }
-
-      const BATCH_SIZE = 6;
-      for (let i = 0; i < keyframeIndices.length; i += BATCH_SIZE) {
-        if (isDisposed) return;
-        const batch = keyframeIndices.slice(i, i + BATCH_SIZE);
-        await Promise.all(batch.map((idx) => loadFrame(idx)));
-      }
-
-      // 3. Dense fill for all remaining intermediate frames
-      const remainingIndices: number[] = [];
-      for (let i = 0; i < FRAME_COUNT; i++) {
-        if (!requested.has(i)) {
-          remainingIndices.push(i);
-        }
-      }
-
-      for (let i = 0; i < remainingIndices.length; i += BATCH_SIZE) {
-        if (isDisposed) return;
-        const batch = remainingIndices.slice(i, i + BATCH_SIZE);
-        await Promise.all(batch.map((idx) => loadFrame(idx)));
-      }
-    };
-
-    // Calculate scroll progress without layout reflows
-    const calculateTarget = () => {
-      if (scrollDistance <= 0) return;
 
       const scrollY = window.scrollY || window.pageYOffset;
-
-      const scrolled = Math.min(
-        Math.max(scrollY - sectionTop, 0),
-        scrollDistance
-      );
-
+      const scrolled = clamp(scrollY - sectionTop, 0, scrollDistance);
       const progress = scrolled / scrollDistance;
+      const duration = Number.isFinite(video.duration) ? video.duration : 0;
 
-      targetFrame = progress * (FRAME_COUNT - 1);
-
-      const frameIndex = Math.round(targetFrame);
-
-      // Prioritize the current frame and nearby frames
-      prioritizeAround(frameIndex);
+      if (duration > 0) {
+        // Stay just before the final frame to avoid the ended state.
+        targetTime = clamp(progress * duration, 0, Math.max(0, duration - 0.04));
+      }
 
       if (indicator) {
         const opacity = Math.max(0, 1 - progress * 5);
-
-        indicator.style.opacity = opacity.toString();
-
-        indicator.style.pointerEvents =
-          opacity <= 0.01 ? "none" : "auto";
+        indicator.style.opacity = opacity.toFixed(3);
+        indicator.style.pointerEvents = opacity <= 0.01 ? "none" : "auto";
       }
 
+      updateHeroContent(progress);
       startAnimation();
     };
 
-    // Smooth and responsive frame interpolation
-    const animate = () => {
-      isRunning = false;
+    const animate = (now: number) => {
+      if (isDisposed) return;
 
-      currentFrame = targetFrame;
+      const duration = Number.isFinite(video.duration) ? video.duration : 0;
+      if (!duration || video.readyState < HTMLMediaElement.HAVE_METADATA) {
+        isRunning = false;
+        return;
+      }
 
-      const frameIndex = Math.round(currentFrame);
+      // Frame-rate-independent easing, so the feel is consistent across displays.
+      const deltaFrames = lastFrameTime ? Math.min((now - lastFrameTime) / (1000 / 60), 3) : 1;
+      lastFrameTime = now;
+      const factor = 1 - Math.pow(1 - DAMPING, Math.max(deltaFrames, 0.1));
+      currentTime += (targetTime - currentTime) * factor;
 
-      drawFrame(frameIndex);
+      if (Math.abs(targetTime - currentTime) < 0.015) {
+        currentTime = targetTime;
+      }
 
-      updateHeroContent(currentFrame);
+      // Avoid a busy animation loop while the browser decodes a seek.
+      // The seeked event resumes animation with the latest target.
+      if (video.seeking) {
+        isRunning = false;
+        lastFrameTime = 0;
+        return;
+      }
+
+      if (Math.abs(video.currentTime - currentTime) > 0.035) {
+        try {
+          video.currentTime = currentTime;
+        } catch {
+          // Ignore transient seek errors while metadata/data is being prepared.
+        }
+      }
+
+      const stillEasing = Math.abs(targetTime - currentTime) >= 0.015;
+
+      if (video.seeking) {
+        isRunning = false;
+      } else if (stillEasing) {
+        rafId = requestAnimationFrame(animate);
+      } else {
+        isRunning = false;
+        lastFrameTime = 0;
+      }
     };
 
-    const startAnimation = () => {
-      if (isRunning) return;
-
+    function startAnimation() {
+      if (isRunning || isDisposed) return;
       isRunning = true;
-
+      lastFrameTime = 0;
       rafId = requestAnimationFrame(animate);
+    }
+
+    const onMetadataLoaded = () => {
+      video.pause();
+      updateGeometry();
+      updateScrollTarget();
+      currentTime = targetTime;
+      if (!video.seeking && Math.abs(video.currentTime - currentTime) > 0.02) {
+        video.currentTime = currentTime;
+      }
+      startAnimation();
     };
 
-    // Initial setup
-    updateGeometry();
-    resizeCanvas();
-    preloadFrames();
-    calculateTarget();
-    currentFrame = targetFrame;
-    drawFrame(Math.round(currentFrame), true);
-    updateHeroContent(currentFrame);
+    const onSeeked = () => {
+      if (isDisposed) return;
+      // A new scroll target may have arrived while the previous seek was decoding.
+      if (
+        Math.abs(video.currentTime - targetTime) > 0.05 ||
+        Math.abs(currentTime - targetTime) > 0.015
+      ) {
+        startAnimation();
+      }
+    };
 
     const onResize = () => {
       updateGeometry();
-      resizeCanvas();
-      calculateTarget();
+      updateScrollTarget();
     };
 
-    const handleScroll = () => {
-      calculateTarget();
-    };
+    const onScroll = () => updateScrollTarget();
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
+    updateGeometry();
+
+    if (video.readyState >= HTMLMediaElement.HAVE_METADATA) {
+      onMetadataLoaded();
+    }
+
+    video.addEventListener("loadedmetadata", onMetadataLoaded);
+    video.addEventListener("seeked", onSeeked);
+    window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize);
 
-    const lenis = (window as any).__lenis;
+    // Support an existing Lenis smooth-scroll instance, if the project uses it.
+    const lenis = (window as Window & { __lenis?: any }).__lenis;
     if (lenis && typeof lenis.on === "function") {
-      lenis.on("scroll", handleScroll);
+      lenis.on("scroll", onScroll);
     }
 
     return () => {
       isDisposed = true;
-      window.removeEventListener("scroll", handleScroll);
+      cancelAnimationFrame(rafId);
+      video.removeEventListener("loadedmetadata", onMetadataLoaded);
+      video.removeEventListener("seeked", onSeeked);
+      window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
       if (lenis && typeof lenis.off === "function") {
-        lenis.off("scroll", handleScroll);
+        lenis.off("scroll", onScroll);
       }
-      cancelAnimationFrame(rafId);
     };
   }, []);
 
   return (
-    <section
-      ref={sectionRef}
-      className="pepsi-scroll-section"
-    >
+    <section ref={sectionRef} className="pepsi-scroll-section">
       <div className="pepsi-sticky-hero">
-        <canvas
-          ref={canvasRef}
-          className="pepsi-hero-canvas"
-          aria-label="Pepsi product animation"
-          role="img"
+        <video
+          ref={videoRef}
+          className="pepsi-hero-video"
+          src="/videos/pepsi-video.mp4"
+          muted
+          playsInline
+          preload="auto"
+          disablePictureInPicture
+          aria-label="Pepsi product scroll animation"
         />
 
-        <div
-          ref={heroContentRef}
-          className="hero-content-outer"
-        >
+        <div ref={heroContentRef} className="hero-content-outer">
           <div className="pepsi-hero-content">
             <h1>
               That's <span>what </span>
@@ -367,10 +230,7 @@ export default function PepsiHero() {
           </div>
         </div>
 
-        <div
-          className="scroll-indicator"
-          ref={indicatorRef}
-        >
+        <div className="scroll-indicator" ref={indicatorRef}>
           <span>SCROLL TO EXPLORE</span>
           <span className="scroll-arrow">↓</span>
         </div>

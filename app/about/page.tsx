@@ -9,6 +9,7 @@ import SmoothScroll from "../components/SmoothScroll";
 import "./about.css";
 import ProductMini from "../components/product-mini/ProductMini";
 import PageLoader from "../components/PageLoader";
+import FloatingCart from "../components/FloatingCart";
 
 const HOLIDAYS = [
   "New Years Day",
@@ -88,6 +89,7 @@ export default function AboutPage() {
         </div>
         <ProductMini />
       </main>
+      <FloatingCart count={2} />
       <Footer />
     </>
   );
