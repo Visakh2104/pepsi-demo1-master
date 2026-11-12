@@ -8,6 +8,7 @@ import Footer from "../components/footer/Footer";
 import SmoothScroll from "../components/SmoothScroll";
 import "./about.css";
 import ProductMini from "../components/product-mini/ProductMini";
+import PageLoader from "../components/PageLoader";
 
 const HOLIDAYS = [
   "New Years Day",
@@ -23,6 +24,7 @@ export default function AboutPage() {
   return (
     <>
       <SmoothScroll />
+      <PageLoader />
       <Header />
       <main className="about-page">
         <div className="about-content">

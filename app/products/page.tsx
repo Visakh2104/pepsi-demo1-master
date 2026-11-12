@@ -10,6 +10,7 @@ import { productsData, Product } from "../data/products";
 import FloatingCart from "../components/FloatingCart";
 import SmoothScroll from "../components/SmoothScroll";
 import "./products.css";
+import PageLoader from "../components/PageLoader";
 
 export default function ProductsPage() {
     const [filters, setFilters] = useState<FilterValues>({
@@ -74,6 +75,7 @@ export default function ProductsPage() {
     return (
         <>
             <SmoothScroll />
+            <PageLoader />
             <div className="products-page">
                 <Header />
 

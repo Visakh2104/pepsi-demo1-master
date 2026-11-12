@@ -8,11 +8,13 @@ import Footer from "../components/footer/Footer";
 import SmoothScroll from "../components/SmoothScroll";
 import "./delivery.css";
 import ProductMini from "../components/product-mini/ProductMini";
+import PageLoader from "../components/PageLoader";
 
 export default function DeliveryPickupPage() {
   return (
     <>
     <SmoothScroll />
+    <PageLoader />
     <Header />
     <main className="delivery-page">
         <section className="inner-banner-hero">
