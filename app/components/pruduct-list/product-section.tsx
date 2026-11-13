@@ -1,24 +1,67 @@
 
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import Link from "next/link";
 
-import { productsData } from "../../data/products";
-
 gsap.registerPlugin(ScrollTrigger, useGSAP);
+
+interface Product {
+    id: number;
+    title: string;
+    slug: string;
+    link: string;
+    image: string;
+    "wck-meta"?: {subtitle_product?: string[]};
+}
+
+interface ProductsApiResponse {
+    status: boolean;
+    products: Product[];
+}
 
 export default function ProductSection() {
     const sectionRef = useRef<HTMLDivElement | null>(null);
 
+    const [products, setProducts] = useState<Product[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    // Fetch homepage products
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const response = await fetch(
+                    `${process.env.NEXT_PUBLIC_WORDPRESS_API_URL}/products?showhome=1`
+                );
+
+                if (!response.ok) {
+                    throw new Error("Failed to fetch products");
+                }
+
+                const data: ProductsApiResponse = await response.json();
+
+                if (data.status && Array.isArray(data.products)) {
+                    setProducts(data.products);
+                }
+            } catch (error) {
+                console.error("Error fetching homepage products:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProducts();
+    }, []);
+
+    // GSAP animations
     useGSAP(
         () => {
             const section = sectionRef.current;
-            if (!section) return;
+            if (!section || !products.length) return;
 
             const cards = gsap.utils.toArray<HTMLElement>(
                 ".product-col1",
@@ -27,13 +70,13 @@ export default function ProductSection() {
 
             cards.forEach((card, index) => {
                 const image =
-                    card.querySelector<HTMLImageElement>(".product-img");
+                    card.querySelector<HTMLElement>(".product-img");
+
                 const title =
                     card.querySelector<HTMLElement>(".product-cont");
 
                 if (!image || !title) return;
 
-                // Initial hidden state
                 gsap.set(image, {
                     y: 180,
                     z: -180,
@@ -59,9 +102,6 @@ export default function ProductSection() {
                     },
                 });
 
-                
-
-
                 tl.to(image, {
                     y: 0,
                     z: 0,
@@ -73,7 +113,6 @@ export default function ProductSection() {
                     ease: "power2.out",
                     duration: 1,
                 });
-
 
                 tl.to(
                     title,
@@ -87,18 +126,26 @@ export default function ProductSection() {
                 );
             });
         },
-        { scope: sectionRef }
+        {
+            scope: sectionRef,
+            dependencies: [products],
+            revertOnUpdate: true,
+        }
     );
+
+    if (loading) {
+        return <div ref={sectionRef} className="product-section" />;
+    }
 
     return (
         <div ref={sectionRef} className="product-section">
             <div className="product-grid">
-                {productsData.map((product) => (
+                {products.map((product) => (
                     <div className="product-col1" key={product.id}>
                         <div className="product-img">
                             <Image
                                 src={product.image}
-                                alt={product.name}
+                                alt={product.title}
                                 width={400}
                                 height={400}
                                 sizes="(max-width: 768px) 80vw, 25vw"
@@ -107,8 +154,9 @@ export default function ProductSection() {
                         </div>
 
                         <div className="product-cont">
-                            <h4>{product.name}</h4>
-                            <p>{product.desc}</p>
+                            <h4>{product.title}</h4>
+                            <p>{product["wck-meta"]?.subtitle_product?.[0] || ""}</p>
+
                             <Link href="/products" className="prdt-btn">FIND OUT MORE</Link>
                         </div>
                     </div>
