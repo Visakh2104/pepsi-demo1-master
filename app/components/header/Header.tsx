@@ -9,9 +9,9 @@ import "./header.css";
 const MENU = [
     { label: "Home", href: "/" },
     { label: "Products", href: "/products", dropdown: true },
-    { label: "Delivery/Pick up", href: "/delivery" },
+    { label: "Delivery/Pick up", href: "/delivery-page" },
     { label: "Contact", href: "/contact" },
-    { label: "About", href: "/about" },
+    { label: "About", href: "/about-us" },
 ];
 
 // Dummy product list for the "Products" dropdown: swap the names, links and images for real ones
