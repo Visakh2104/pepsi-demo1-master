@@ -8,12 +8,36 @@ const MOBILE_QUERY = "(max-width: 767px)";
 
 type Mode = "pending" | "mobile" | "desktop";
 
+interface HomePageResponse {
+  "wck-meta"?: {
+    banner_text_new?: string[];
+  };
+}
+
 export default function PepsiHero() {
   const [mode, setMode] = useState<Mode>("pending");
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const indicatorRef = useRef<HTMLDivElement>(null);
   const heroContentRef = useRef<HTMLDivElement>(null);
+  const [bannerText, setBannerText] = useState("");
+
+  useEffect(() => {
+    const fetchHomeBanner = async () => {
+      try {
+        const response = await fetch(process.env.NEXT_PUBLIC_HOME_PAGE_API_URL!);
+        if (!response.ok) {
+          throw new Error("Failed to fetch home banner");
+        }
+        const data: HomePageResponse = await response.json();
+        setBannerText(data["wck-meta"]?.banner_text_new?.[0] || "");
+      }
+      catch (error) {
+        console.error("Error fetching home banner:", error);
+      }
+    };
+    fetchHomeBanner();
+  }, []);
 
   // Detect mobile / desktop (and react when the screen is resized or rotated)
   useEffect(() => {
@@ -272,19 +296,8 @@ export default function PepsiHero() {
 
         <div ref={heroContentRef} className="hero-content-outer">
           <div className="pepsi-hero-content">
-            <h1>
-              That's <span>what </span>
-              <span>i like</span>
-            </h1>
-
-            <p>
-              Big taste. Real refreshment. 3g prebiotic
-              fiber and no artificial sweeteners.
-            </p>
-
-            <Link href="#" className="banner-btn">
-              Shop now
-            </Link>
+            <div dangerouslySetInnerHTML={{ __html: bannerText, }} />
+            <Link href="#" className="banner-btn"> Shop now</Link>
           </div>
         </div>
 
