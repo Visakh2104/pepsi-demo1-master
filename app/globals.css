@@ -592,7 +592,7 @@ body {
   width: 100%;
   display: block;
   padding: 210px 0 180px;
-  background: url(../public/images/contn-bg-2.jpg)center / cover no-repeat fixed;
+  background: var(--about-bg-image) center / cover no-repeat fixed;
   background-size: 100%;
   position: relative;
   overflow: hidden;

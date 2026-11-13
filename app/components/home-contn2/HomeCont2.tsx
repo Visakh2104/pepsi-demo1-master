@@ -1,15 +1,42 @@
 
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
+interface HomePageResponse {
+  "wck-meta"?: {
+    home_about_content?: string[];
+    home_about_backgroundimg?: string[];
+  };
+}
+
 export function HomeCont2() {
   const sectionRef = useRef<HTMLElement>(null);
+  const [aboutContent, setAboutContent] = useState("");
+  const [backgroundImage, setBackgroundImage] = useState("");
+
+  useEffect(() => {
+    const fetchAboutContent = async () => {
+      try {
+        const response = await fetch(process.env.NEXT_PUBLIC_HOME_PAGE_API_URL!);
+        if (!response.ok) {
+          throw new Error("Failed to fetch home about content");
+        }
+        const data: HomePageResponse = await response.json();
+        setAboutContent(data["wck-meta"]?.home_about_content?.[0] || "");
+        setBackgroundImage(data["wck-meta"]?.home_about_backgroundimg?.[0] || "");
+      }
+      catch (error) {
+        console.error("Error fetching home about content:", error);
+      }
+    };
+    fetchAboutContent();
+  }, []);
 
   useGSAP(
     () => {
@@ -55,11 +82,15 @@ export function HomeCont2() {
           0
         );
     },
-    { scope: sectionRef }
+    {
+      scope: sectionRef,
+      dependencies: [aboutContent],
+      revertOnUpdate: true,
+    }
   );
 
   return (
-    <section className="home-cont-wrapp" ref={sectionRef}>
+    <section className="home-cont-wrapp" ref={sectionRef} style={{ "--about-bg-image": backgroundImage ? `url( "${backgroundImage}")` : "none", } as React.CSSProperties}>
       <div
         className="home-cont-wrapp__bg"
         aria-hidden="true"
@@ -67,23 +98,7 @@ export function HomeCont2() {
 
       <div className="container">
         <h2>About</h2>
-
-        <p>
-          Every day is a great day to enjoy Pepsi-Cola
-          products delivered free to your home by your
-          local Pepsi bottler, Pepsi-Cola Champaign-Urbana
-          Bottling Co.!
-        </p>
-
-        <p>
-          You deserve to have easy access to delicious drinks
-          like Pepsi, Mtn Dew, Starry, Starbucks, Aquafina,
-          Pure Leaf Tea and our other brands. Through this
-          site, we are now offering you delivery of our
-          products right to your door in Champaign, Urbana,
-          and Savoy, IL, or warehouse pick up at our location
-          in Champaign.
-        </p>
+        <div dangerouslySetInnerHTML={{ __html: aboutContent }} />
       </div>
     </section>
   );
