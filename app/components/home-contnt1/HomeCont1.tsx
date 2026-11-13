@@ -24,7 +24,7 @@ export default function HomeCont1() {
   useEffect(() => {
     const fetchHomeDescription = async () => {
       try {
-        const response = await fetch(process.env.NEXT_PUBLIC_HOME_PAGE_API_URL!);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_WORDPRESS_API_URL}/page/home`);
         if (!response.ok) {
           throw new Error("Failed to fetch home description");
         }

@@ -25,7 +25,7 @@ export default function PepsiHero() {
   useEffect(() => {
     const fetchHomeBanner = async () => {
       try {
-        const response = await fetch(process.env.NEXT_PUBLIC_HOME_PAGE_API_URL!);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_WORDPRESS_API_URL}/page/home`);
         if (!response.ok) {
           throw new Error("Failed to fetch home banner");
         }
