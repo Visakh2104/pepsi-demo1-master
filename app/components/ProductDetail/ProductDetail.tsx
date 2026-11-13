@@ -57,7 +57,7 @@ export default function ProductDetail({
                         <Link href="/products">Products</Link>
                         <span>/</span>
                             <Link href="" className="current">Product Name</Link>
-                        {/* <span aria-current="page">{name}</span> */}
+                    
                     </nav>
 
                     <div className="product-main">
