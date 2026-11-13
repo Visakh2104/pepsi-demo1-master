@@ -16,6 +16,7 @@ p{
     color: #fff;
     font-weight: 400;
     color: #E3E6F5;
+       font-family: Inter, sans-serif;
 }
 .privacy-top {
   padding: 40px 0 50px;
@@ -33,7 +34,7 @@ p{
     flex-wrap: wrap;
     align-items: center;
     gap: 6px;
-    margin-bottom: 26px;
+    margin-bottom: 28px;
     font-family: Inter, sans-serif;
     font-size: 15px;
     font-weight: 700;
@@ -64,7 +65,7 @@ color:#ff5a66;
 text-transform: uppercase;
     flex-direction: column;
     margin: 0 0 36px;
-    font-size: 56px;
+    font-size: 54px;
     font-weight: 700;
     line-height: 1.05;
     display: flex;
@@ -126,7 +127,7 @@ text-transform: uppercase;
 }
 
 .privacy-section p {
-  margin: 0 0 20px;
+  margin: 0 0 16px;
   font-size: 17px;
   line-height: 1.6;
 }
@@ -157,25 +158,31 @@ text-transform: uppercase;
 
 @media (max-width: 991px) {
   .privacy-top {
-    padding: 32px 0 72px;
+    padding: 32px 0 38px;
   }
 
   .privacy-top h1 {
-    font-size: 46px;
+    font-size: 42px;
   }
-
+.privacy-top h1 span {
+    font-size: 22px;
+}
   .privacy-body {
     width: 100%;
   }
 
   .privacy-intro {
-    font-size: 18px;
+    font-size: 17px;
   }
 
   .privacy-section h2 {
-    font-size: 18px;
+    font-size: 16px;
     padding: 14px 28px;
   }
+.privacy-section p{font-size:16px;}
+.privacy-intro {
+    margin: 0 0 40px;}
+
 }
 
 @media (max-width: 767px) {
@@ -188,18 +195,29 @@ text-transform: uppercase;
   }
 
   .privacy-intro {
-    margin-bottom: 40px;
-    font-size: 17px;
+        margin-bottom: 35px;
+        font-size: 16px;
   }
 
   .privacy-section {
     padding: 32px 0;
   }
+
+    .privacy-section h2 {
+        font-size: 15px;
+    }
+
+    .privacy-section p {
+        font-size: 15px;
+    }
+.privacy-top {
+        padding: 50px 0 52px;
+    }
 }
 
 @media (max-width: 575px) {
   .privacy-top {
-    padding: 24px 0 56px;
+          padding: 40px 0 26px;
   }
 
   .privacy-breadcrumb {
@@ -215,11 +233,10 @@ text-transform: uppercase;
     font-size: 16px;
   }
 
-  .privacy-section h2 {
-    font-size: 15px;
-    padding: 12px 22px;
-  }
-
+     .privacy-section h2 {
+        padding: 12px 18px;
+        font-size: 13px;
+    }
   .privacy-section p {
     font-size: 15px;
   }
@@ -227,17 +244,24 @@ text-transform: uppercase;
 
 @media (max-width: 480px) {
   .privacy-top h1 {
-    font-size: 28px;
+    font-size: 26px;    margin: 0 0 28px;
   }
 
   .privacy-section h2 {
-    font-size: 13px;
-    padding: 10px 18px;
-    width: 100%;
+         width: 100%;
+        padding: 10px 12px;
+        font-size: 12px;
+
     justify-content: center;
     text-align: center;
   }
+    .privacy-top h1 span {
+        font-size: 20px;
+    }
 
+    .privacy-intro {
+        margin: 0 0 20px;
+    }
   .privacy-section p {
     font-size: 14px;
   }
