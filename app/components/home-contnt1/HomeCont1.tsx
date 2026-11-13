@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect  } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -9,8 +9,37 @@ import './homeCont1.css'
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
+interface HomePageResponse {
+  "wck-meta"?: {
+    hmdescription?: string[];
+    description_backgroundurl?: string[];
+  };
+}
+
 export default function HomeCont1() {
   const sectionRef = useRef<HTMLElement>(null);
+  const [description, setDescription] = useState("");
+  const [videoId, setVideoId] = useState("");
+
+  useEffect(() => {
+    const fetchHomeDescription = async () => {
+      try {
+        const response = await fetch(process.env.NEXT_PUBLIC_HOME_PAGE_API_URL!);
+        if (!response.ok) {
+          throw new Error("Failed to fetch home description");
+        }
+        const data: HomePageResponse = await response.json();
+        setDescription(data["wck-meta"]?.hmdescription?.[0] || "");
+        const videoUrl = data["wck-meta"]?.description_backgroundurl?.[0] || "";
+        const extractedVideoId = videoUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&?/]+)/)?.[1] || "";
+        setVideoId(extractedVideoId);
+      }
+      catch (error) {
+        console.error("Error fetching home description:", error);
+      }
+    };
+    fetchHomeDescription();
+  }, []);
 
   useGSAP(
     () => {
@@ -65,7 +94,11 @@ export default function HomeCont1() {
         );
 
     },
-    { scope: sectionRef }
+    {
+      scope: sectionRef,
+      dependencies: [description],
+      revertOnUpdate: true,
+    }
   );
 
   return (
@@ -76,29 +109,19 @@ export default function HomeCont1() {
       />
 
       <div className="homecont-video">
+        {videoId && (
           <iframe
-            src="https://www.youtube.com/embed/UZZ5s_qhHMA?autoplay=1&mute=1&loop=1&playlist=UZZ5s_qhHMA&controls=0&modestbranding=1&rel=0&iv_load_policy=3&disablekb=1"
+            src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&modestbranding=1&rel=0&iv_load_policy=3&disablekb=1`}
             title="Background Video"
             frameBorder="0"
             allow="autoplay; encrypted-media"
             allowFullScreen
-          ></iframe>
+          />
+        )}
       </div>
 
       <div className="container">
-        <p>
-          Pepsi Home Delivery Urbana-Champaign provides free
-          home delivery of beverages such as Mountain Dew,
-          Gatorade, Bubly, Starbucks, Dole Juices, Pure Leaf
-          teas and more to Champaign, Urbana, Savoy, and
-          Rantoul IL!
-        </p>
-
-        <p>
-          We also offer free warehouse pick up of all the
-          products on this website at our Champaign warehouse
-          on Anthony Drive North of Interstate 74
-        </p>
+        <div dangerouslySetInnerHTML={{ __html: description, }} />
       </div>
     </section>
   );
