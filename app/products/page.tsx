@@ -11,6 +11,7 @@ import FloatingCart from "../components/FloatingCart";
 import SmoothScroll from "../components/SmoothScroll";
 import "./products.css";
 import PageLoader from "../components/PageLoader";
+import ProductRequestPopup from "../product-popup/ProductRequestPopup";
 
 export default function ProductsPage() {
     const [filters, setFilters] = useState<FilterValues>({
@@ -135,6 +136,10 @@ export default function ProductsPage() {
                 <FloatingCart count={2} />
 
                 <Footer />
+
+                <>
+                  <ProductRequestPopup />
+                </>
             </div>
         </>
     );
