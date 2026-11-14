@@ -1,60 +1,56 @@
-"use client";
 
 import Link from "next/link";
-import type { ReactNode } from "react";
 import "./Delivery.css";
-import { useEffect, useState } from "react";
 
-type InfoItem = {
-    title: string;
-    body: ReactNode;
-};
-
-function InfoColumns({ items }: { items: InfoItem[] }) {
-    return (
-        <div className="delivery-columns">
-            {items.map((item) => (
-                <article key={item.title} className="delivery-column">
-                    <h3>{item.title}</h3>
-                    <p>{item.body}</p>
-                </article>
-            ))}
-        </div>
-    );
+interface DeliveryPageResponse {
+    title?: string;
+    "wck-meta"?: {
+        freehome_delivery_content?: string[];
+        freehome_delivery_content_1?: string[];
+        freehome_delivery_content_2?: string[];
+        freepickupcontent?: string[];
+        freepickupcontent_1?: string[];
+        freepickupcontent_2?: string[];
+    };
 }
 
-export default function Delivery() {
-    const [pageTitle, setPageTitle] = useState("Delivery or Warehouse Pick Up");
-    const [homeDeliveryContent, setHomeDeliveryContent] = useState<string[]>([]);
-    const [warehousePickupContent, setWarehousePickupContent] = useState<string[]>([]);
+async function getDeliveryPage(): Promise<DeliveryPageResponse | null> {
+    try {
+        const response = await fetch(
+            `${process.env.NEXT_PUBLIC_WORDPRESS_API_URL}/page/delivery`,
+            {
+                cache: "no-store",
+            }
+        );
 
-    useEffect(() => {
-        const fetchDeliveryPage = async () => {
-            try {
-                const response = await fetch(`${process.env.NEXT_PUBLIC_WORDPRESS_API_URL}/page/delivery`);
-                if (!response.ok) {
-                    throw new Error("Failed to fetch delivery page");
-                }
-                const data = await response.json();
-                setPageTitle(data.title || "Delivery or Warehouse Pick Up");
-                const meta = data["wck-meta"] || {};
-                setHomeDeliveryContent([
-                    meta.freehome_delivery_content?.[0] || "",
-                    meta.freehome_delivery_content_1?.[0] || "",
-                    meta.freehome_delivery_content_2?.[0] || "",
-                ]);
-                setWarehousePickupContent([
-                    meta.freepickupcontent?.[0] || "",
-                    meta.freepickupcontent_1?.[0] || "",
-                    meta.freepickupcontent_2?.[0] || "",
-                ]);
-            }
-            catch (error) {
-                console.error("Error fetching delivery page:", error);
-            }
-        };
-        fetchDeliveryPage();
-    }, []);
+        if (!response.ok) {
+            throw new Error("Failed to fetch delivery page");
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Error fetching delivery page:", error);
+        return null;
+    }
+}
+
+export default async function Delivery() {
+    const data = await getDeliveryPage();
+
+    const pageTitle = data?.title || "Delivery or Warehouse Pick Up";
+    const meta = data?.["wck-meta"] || {};
+
+    const homeDeliveryContent = [
+        meta.freehome_delivery_content?.[0] || "",
+        meta.freehome_delivery_content_1?.[0] || "",
+        meta.freehome_delivery_content_2?.[0] || "",
+    ];
+
+    const warehousePickupContent = [
+        meta.freepickupcontent?.[0] || "",
+        meta.freepickupcontent_1?.[0] || "",
+        meta.freepickupcontent_2?.[0] || "",
+    ];
 
     return (
         <main className="delivery-page">
@@ -62,19 +58,12 @@ export default function Delivery() {
             <section className="delivery-section">
                 <div className="container">
                     <nav className="delivery-breadcrumb" aria-label="Breadcrumb">
-                        <Link href="/">
-                            Home
-                        </Link>
+                        <Link href="/">Home</Link>
                         <span>/</span>
-                        <span aria-current="page">
-                            {pageTitle}
-                        </span>
+                        <span aria-current="page">{pageTitle}</span>
                     </nav>
 
-                    <h1>
-                        <span>Delivery or</span>
-                        Warehouse Pick Up
-                    </h1>
+                    <h1>{pageTitle}</h1>
 
                     <p>
                         We are offering home delivery as well as warehouse pick up in order
@@ -82,13 +71,18 @@ export default function Delivery() {
                         favorite beverages.
                     </p>
 
-                    <button className="delivery-btn">Free Home Delivery</button>
+                    <button className="delivery-btn">
+                        Free Home Delivery
+                    </button>
+
                     <div className="delivery-columns">
-                        {homeDeliveryContent.map((content, index) => ( content && (
-                        <article key={index} className="delivery-column">
-                            <div dangerouslySetInnerHTML={{ __html: content }} />
-                        </article>
-                        ) ))}
+                        {homeDeliveryContent.map((content, index) =>
+                            content ? (
+                                <article key={index} className="delivery-column">
+                                    <div dangerouslySetInnerHTML={{ __html: content }} />
+                                </article>
+                            ) : null
+                        )}
                     </div>
                 </div>
             </section>
@@ -96,13 +90,18 @@ export default function Delivery() {
             {/* Free Warehouse Pick Up */}
             <section className="delivery-section delivery-section-alt">
                 <div className="container">
-                    <button className="delivery-btn">Free Warehouse Pick Up</button>
+                    <button className="delivery-btn">
+                        Free Warehouse Pick Up
+                    </button>
+
                     <div className="delivery-columns">
-                        {warehousePickupContent.map((content, index) => ( content && (
-                        <article key={index} className="delivery-column">
-                            <div dangerouslySetInnerHTML={{ __html: content }} />
-                        </article>
-                        ) ))}
+                        {warehousePickupContent.map((content, index) =>
+                            content ? (
+                                <article key={index} className="delivery-column">
+                                    <div dangerouslySetInnerHTML={{ __html: content }} />
+                                </article>
+                            ) : null
+                        )}
                     </div>
                 </div>
             </section>
