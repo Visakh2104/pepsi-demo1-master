@@ -56,14 +56,16 @@
      width: 98%;
     max-width: 1342px;
   max-height: calc(100vh - 48px);
-  background-color: var(--cup-black);
+  background-color: #fff;
   border-radius: 40px 40px 0 0;
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.7);
   transform: translateY(110vh);
   transition: transform 1.6s cubic-bezier(0.22, 1, 0.36, 1);
   bottom: 0;
-      background-color: #6c6c6c;
-      border: 1px solid #0000FE;
+      /* background-color: #6c6c6c; */
+      border: 1px solid #0000fe55;
+          padding-bottom: 20px;
+          border-bottom: 0;
 }
 
 .cup.is-open .cup-dialog {
@@ -82,8 +84,19 @@ border-radius: 40px 24px 24px 24px;
   scrollbar-color: var(--cup-red) transparent;
       margin-top: -1px;
     margin-left: -1px;
+        max-height: 37vw;
 }
 
+
+.cup-inner::-webkit-scrollbar{
+    width: 8px;
+border-radius: 50px;
+height: calc(100vh - 20px);
+}
+.cup-inner::-webkit-scrollbar-thumb{
+     border-radius: 20px;
+     background-color: #c0122c;
+}
 /* Close button: sits just outside the top-right corner, as in the design */
 .cup-close {
   position: absolute;
@@ -91,7 +104,7 @@ border-radius: 40px 24px 24px 24px;
     right: 40px;
   z-index: 2;
   display: flex;
-  align-items: center;
+  /* align-items: center; */
   justify-content: center;
   width: 40px;
   height: 40px;
@@ -105,6 +118,7 @@ border-radius: 40px 24px 24px 24px;
   cursor: pointer;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
   transition: all 0.3s ease-in-out;
+      line-height: 1.55;
 }
 
 .cup-close:hover {
@@ -166,18 +180,20 @@ border-radius: 40px 24px 24px 24px;
   display: flex;
   align-items: center;
   justify-content: center;
-width: 26px;
-    height: 26px;
+width: 28px;
+    height: 28px;
   border-radius: 50%;
   color: var(--cup-text);
   text-decoration: none;
   transition: background-color 0.3s ease;
 }
 .cup-social a svg {
-    width: 16px;
-    height: 16px;
+    width: 28px;
+    height: 28px;
+    color: #000;
+transition: all .3s ease-in-out;
 }
-
+.cup-social a:hover svg{ color: #FF5A66;}
 .cont-box>span {
     text-transform: uppercase;
     font-size: 14px;
@@ -220,6 +236,7 @@ margin: 0 0 20px;
     line-height: 1.2;
     font-family: "Unbounded", sans-serif;
     text-transform: uppercase;
+        color: #000;
 }
 
 .cup-map {
@@ -248,7 +265,7 @@ overflow: hidden;
 }
 
 .cup-info li a{
-color: #fff;
+    color: #000;
 text-decoration: none;
   text-decoration-color: var(--lrm-link);
   text-underline-offset: 3px;
@@ -282,12 +299,13 @@ align-items: flex-start;
     font-family: Inter, sans-serif;
     line-height: 1.6;
     display: flex;
+        color: #000;
 }
 
 .cup-info li > svg {
   flex: 0 0 auto;
   margin-top: 2px;
-  color: #0000FE;
+  color: #000;
 }
 
 .cup-info li > div {
@@ -310,8 +328,8 @@ align-items: flex-start;
   }
 
   .cup-left {
-    flex-basis: 40%;
-    padding: 48px 36px 36px;
+    flex-basis: 48%;
+    padding:0;
   }
 
   .cup-left > h2 {
@@ -321,6 +339,17 @@ align-items: flex-start;
   .cup-right {
     padding: 40px 32px 32px;
   }
+
+.cont-box h2 {  font-size:28px;}
+.cont-box p {font-size: 17px; }
+.cont-box {  padding: 40px 40px 26px;}
+.cup-right h3 { font-size: 20px;}
+.cup-info li {  font-size: 15px;}
+
+.cup-inner {
+    max-height: 40vw;
+}
+
 }
 
 @media (max-width: 991px) {
@@ -330,13 +359,17 @@ align-items: flex-start;
 
   .cup-left {
     flex-basis: 44%;
-    padding: 40px 28px 32px;
+    padding: 0px;
   }
-
+.cont-box {
+        padding: 35px 35px 21px;
+    }
   .cup-left > h2 {
     font-size: 26px;
   }
-
+.cont-box h2 {
+        font-size: 19px;
+    }
   .cup-right {
     padding: 32px 24px 28px;
   }
@@ -344,6 +377,19 @@ align-items: flex-start;
   .cup-map {
     height: 180px;
   }
+
+    .cont-box p {
+        font-size: 15px;
+    }
+.cup-inner {
+max-height: 50vw;
+}
+.cup-close {
+    width: 33px;
+    height: 33px;
+        line-height: 1.4;
+}
+
 }
 
 /* Stack the two halves */
@@ -358,30 +404,49 @@ align-items: flex-start;
 
   .cup-inner {
     flex-direction: column;
+            margin: 0;
   }
 
   .cup-left {
     flex: 0 0 auto;
     border-radius: 0 0 96px 0;
-    padding: 36px 28px 40px;
+    padding:0px;
   }
-
+    .cont-box h2 {
+        font-size: 25px;
+    }
   .cup-social {
     margin-top: 28px;
   }
 
   .cup-right {
-    padding: 28px 24px 32px;
+    padding: 28px 24px 10px;
   }
+.cup-social {
+    padding: 0 0 20px 30px;
+}
+.cup-social a svg {
+    width: 18px;
+    height: 18px;
+}
+.cup-inner {
+        max-height: 64vw;
+    }
+        .cont-box {
+             border-radius: 0 0 0px;
+        border-top-right-radius: 40px;
+           
+    }
+
 }
 
 @media (max-width: 575px) {
   .cup-close {
-    top: -12px;
+    /* top: -12px;
     right: -6px;
     width: 36px;
     height: 36px;
-    font-size: 22px;
+    font-size: 22px; */
   }
 
   .cup-left > h2 {
@@ -399,6 +464,13 @@ align-items: flex-start;
   .cup-map {
     height: 160px;
   }
+
+ .cup-right {
+    padding: 28px 24px 5px;
+  }
+    .cup-inner {
+        max-height: 84vw;
+    }
 }
 
 @media (max-width: 480px) {
@@ -407,19 +479,46 @@ align-items: flex-start;
   }
 
   .cup-left {
-    padding: 32px 22px 32px;
-    border-radius: 0 0 72px 0;
+    padding: 0px;
+    border-radius: 0 0 56px 0;
   }
 
   .cup-left > h2 {
     font-size: 21px;
   }
 
-  .cup-right {
+  /* .cup-right {
     padding: 24px 18px 26px;
-  }
+  } */
 
   .cup-info li {
     font-size: 12px;
   }
+
+    .cup-inner {
+        max-height: 80vh;
+    }
+
+
+
+
+
+    
+    .cont-box {
+        padding: 23px 21px 15px;
+        border-radius: 0 39px 2px 0;
+    }
+    .cont-box h2 {
+        font-size: 18px;
+    }
+.cont-box p {
+        font-size: 12px;
+    }
+    .cup-right {
+        padding: 9px 18px 26px;
+    }
+    .cup-right h3 {
+        font-size: 15px;
+    }
+
 }

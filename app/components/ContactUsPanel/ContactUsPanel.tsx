@@ -102,74 +102,78 @@ export default function ContactUsPanel({
                     &times;
                 </button>
 
-                <div className="cup-inner">
-                    <div className="cup-left">
-                        <div className="cont-box">
-                            <span>Contact us</span>
-                            <h2>We offer local delivery &amp; pickup to:</h2>
-                            <p>Champaign, Urbana, &amp; Savoy Illinois</p>
-                        </div>
-                        <div className="cup-social">
-                            <a href="#" aria-label="Facebook">
-                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2">
-                                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
-                                </svg>
-                            </a>
-                            <a href="#" aria-label="Instagram">
-                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2">
-                                    <rect x="3" y="3" width="18" height="18" rx="5" />
-                                    <circle cx="12" cy="12" r="4" />
-                                    <circle cx="17.5" cy="6.5" r="0.6" fill="currentColor" />
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
+                <div className="cup-inner" data-lenis-prevent>
 
-                    <div className="cup-right">
-                        <h3>Pepsi Cola C-U Bottling Co.</h3>
-
-                        <div className="cup-map">
-                            <iframe
-                                title="Map showing Pepsi Cola C-U Bottling Co."
-                                src="https://www.google.com/maps?q=1306%20W%20Anthony%20Dr%2C%20Champaign%2C%20IL%2061821&output=embed"
-                                loading="lazy"
-                                referrerPolicy="no-referrer-when-downgrade"
-                                allowFullScreen
-                            />
+                    {/* <div className="cover-scroll"> */}
+                        <div className="cup-left">
+                            <div className="cont-box">
+                                <span>Contact us</span>
+                                <h2>We offer local delivery &amp; pickup to:</h2>
+                                <p>Champaign, Urbana, &amp; Savoy Illinois</p>
+                            </div>
+                            <div className="cup-social">
+                                <a href="#" aria-label="Facebook">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+                                    </svg>
+                                </a>
+                                <a href="#" aria-label="Instagram">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <rect x="3" y="3" width="18" height="18" rx="5" />
+                                        <circle cx="12" cy="12" r="4" />
+                                        <circle cx="17.5" cy="6.5" r="0.6" fill="currentColor" />
+                                    </svg>
+                                </a>
+                            </div>
                         </div>
 
-                        <ul className="cup-info">
-                            <li>
-                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2">
-                                    <path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z" />
-                                    <circle cx="12" cy="10" r="2.5" />
-                                </svg>
-                                <div>
-                                    1306 W. Anthony Dr.
-                                    <br />
-                                    Champaign, IL 61821
-                                </div>
-                            </li>
-                            <li>
-                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2">
-                                    <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z" />
-                                </svg>
-                                <div> <a href="tel:217352-4126">(217) 352-4126</a> </div>
-                            </li>
-                            <li>
-                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2">
-                                    <rect x="2" y="4" width="20" height="16" rx="2" />
-                                    <path d="M22 6l-10 7L2 6" />
-                                </svg>
-                                <div className="email">
-                                    If you have any questions please contact{" "}
-                                    <a href="mailto:sales@pepsicolacu.com">sales@pepsicolacu.com</a>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
+                        <div className="cup-right">
+                            <h3>Pepsi Cola C-U Bottling Co.</h3>
+
+                            <div className="cup-map">
+                                <iframe
+                                    title="Map showing Pepsi Cola C-U Bottling Co."
+                                    src="https://www.google.com/maps?q=1306%20W%20Anthony%20Dr%2C%20Champaign%2C%20IL%2061821&output=embed"
+                                    loading="lazy"
+                                    referrerPolicy="no-referrer-when-downgrade"
+                                    allowFullScreen
+                                />
+                            </div>
+
+                            <ul className="cup-info">
+                                <li>
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z" />
+                                        <circle cx="12" cy="10" r="2.5" />
+                                    </svg>
+                                    <div>
+                                        1306 W. Anthony Dr.
+                                        <br />
+                                        Champaign, IL 61821
+                                    </div>
+                                </li>
+                                <li>
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z" />
+                                    </svg>
+                                    <div> <a href="tel:217352-4126">(217) 352-4126</a> </div>
+                                </li>
+                                <li>
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <rect x="2" y="4" width="20" height="16" rx="2" />
+                                        <path d="M22 6l-10 7L2 6" />
+                                    </svg>
+                                    <div className="email">
+                                        If you have any questions please contact{" "}
+                                        <a href="mailto:sales@pepsicolacu.com">sales@pepsicolacu.com</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+                    {/* </div> */}
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
