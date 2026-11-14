@@ -74,8 +74,7 @@ useEffect(() => {
                     <p>
                         <span>keep adding more for free home delivery or curbside pickup.</span>
                        
-                        If you don&apos;t see your favorite beverage,{" "}
-                        <Link href="/contact">please let us know!</Link>
+                        If you don&apos;t see your favorite beverage,please let us know!
                     </p>
 
                     <form className="lrm-form" onSubmit={(e) => e.preventDefault()}>
