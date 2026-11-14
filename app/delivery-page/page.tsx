@@ -7,8 +7,6 @@ export const metadata = {
   title: "Delivery or Warehouse Pick Up",
 };
 
-export const dynamic = "force-dynamic";
-
 export default function DeliveryPage() {
   return(
 

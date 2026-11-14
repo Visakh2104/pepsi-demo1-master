@@ -1,6 +1,7 @@
 
 import Link from "next/link";
 import "./Delivery.css";
+import { connection } from "next/server";
 
 interface DeliveryPageResponse {
     title?: string;
@@ -35,6 +36,7 @@ async function getDeliveryPage(): Promise<DeliveryPageResponse | null> {
 }
 
 export default async function Delivery() {
+    await connection();
     const data = await getDeliveryPage();
 
     const pageTitle = data?.title || "Delivery or Warehouse Pick Up";
