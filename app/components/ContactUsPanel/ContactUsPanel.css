@@ -111,11 +111,12 @@ height: calc(100vh - 20px);
   padding: 0;
   border: 0;
   border-radius: 50%;
-  background-color: #ffffff;
-  color: var(--cup-red);
+color: #fff;
+    cursor: pointer;
+    background-color: var(--cup-red);
   font-size: 26px;
   line-height: 1;
-  cursor: pointer;
+ 
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
   transition: all 0.3s ease-in-out;
       line-height: 1.55;
@@ -123,8 +124,9 @@ height: calc(100vh - 20px);
 
 .cup-close:hover {
   /* transform: rotate(90deg); */
-  background: var(--cup-red);
-  color: #fff;
+  background: #fff;
+  color: var(--cup-red);
+  border-color: var(--cup-red);
 }
 
 /* ===== Left: red block with curved bottom-right corner ===== */
