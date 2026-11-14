@@ -1,92 +1,14 @@
+"use client";
+
 import Link from "next/link";
 import type { ReactNode } from "react";
 import "./Delivery.css";
+import { useEffect, useState } from "react";
 
 type InfoItem = {
     title: string;
     body: ReactNode;
 };
-
-const homeDelivery: InfoItem[] = [
-    {
-        title: "Schedule",
-        body: (
-            <>
-                Free home delivery is available
-                Tuesday – Friday between the hours of
-                7:00 A.M. and 4:00 P.M. Orders must
-                be placed by 2:00 PM for 2nd day
-                delivery with a minimum of 3 items.
-                Orders placed after 2:00 P.M. will be
-                delivered on the third business day
-                after purchase and will be delivered
-                by one of our regular delivery
-                drivers.
-            </>
-        ),
-    },
-    {
-        title: "At your door",
-        body: (
-            <>
-                During ordering, you can tell us where to place your delivery and we
-                will let you know when we are there with your order by phone or text.
-            </>
-        ),
-    },
-    {
-        title: "Delivery area",
-        body: (
-            <>
-                We are currently only providing delivery to [CITY 1], [CITY 2] and
-                [CITY 3] zip codes [ZIP CODES]. If you are outside of these areas and
-                would like to see our service in your town,{" "}
-                <Link href="/contact">
-                    let us know
-                </Link>
-                .
-            </>
-        ),
-    },
-];
-
-const warehousePickUp: InfoItem[] = [
-    {
-        title: "Hours",
-        body: (
-            <>
-                You can also pick up your order at [YOUR COMPANY NAME] on [YOUR
-                STREET]. Order pick up is available on Tuesday – Friday from 8:00 A.M.
-                to 12 P.M. and 1 P.M. to 4:00 P.M.
-            </>
-        ),
-    },
-    {
-        title: "At checkout",
-        body: (
-            <>
-                During the checkout process simply choose Warehouse Pick Up and select
-                the day you will be coming to get your order. Orders must be placed by
-                2:00 PM for 2nd day pick up with a minimum of 3 items. Orders placed
-                after 2:00 P.M. will be available for pick up on the third business
-                day after purchase.
-            </>
-        ),
-    },
-    {
-        title: "When you arrive",
-        body: (
-            <>
-                Please come to the front office for a copy of your invoice, before
-                pulling around to door #2. You must have a copy of your invoice to
-                receive product from the warehouse so please stop at the office first.
-                Ring the buzzer on the right and an employee will come out to deliver
-                your order to your vehicle. You will see a map of our building during
-                the checkout process.
-            </>
-        ),
-    },
-];
 
 function InfoColumns({ items }: { items: InfoItem[] }) {
     return (
@@ -102,6 +24,38 @@ function InfoColumns({ items }: { items: InfoItem[] }) {
 }
 
 export default function Delivery() {
+    const [pageTitle, setPageTitle] = useState("Delivery or Warehouse Pick Up");
+    const [homeDeliveryContent, setHomeDeliveryContent] = useState<string[]>([]);
+    const [warehousePickupContent, setWarehousePickupContent] = useState<string[]>([]);
+
+    useEffect(() => {
+        const fetchDeliveryPage = async () => {
+            try {
+                const response = await fetch(`${process.env.NEXT_PUBLIC_WORDPRESS_API_URL}/page/delivery`);
+                if (!response.ok) {
+                    throw new Error("Failed to fetch delivery page");
+                }
+                const data = await response.json();
+                setPageTitle(data.title || "Delivery or Warehouse Pick Up");
+                const meta = data["wck-meta"] || {};
+                setHomeDeliveryContent([
+                    meta.freehome_delivery_content?.[0] || "",
+                    meta.freehome_delivery_content_1?.[0] || "",
+                    meta.freehome_delivery_content_2?.[0] || "",
+                ]);
+                setWarehousePickupContent([
+                    meta.freepickupcontent?.[0] || "",
+                    meta.freepickupcontent_1?.[0] || "",
+                    meta.freepickupcontent_2?.[0] || "",
+                ]);
+            }
+            catch (error) {
+                console.error("Error fetching delivery page:", error);
+            }
+        };
+        fetchDeliveryPage();
+    }, []);
+
     return (
         <main className="delivery-page">
             {/* Intro + Free Home Delivery */}
@@ -113,7 +67,7 @@ export default function Delivery() {
                         </Link>
                         <span>/</span>
                         <span aria-current="page">
-                            Delivery or Warehouse Pick Up
+                            {pageTitle}
                         </span>
                     </nav>
 
@@ -129,7 +83,13 @@ export default function Delivery() {
                     </p>
 
                     <button className="delivery-btn">Free Home Delivery</button>
-                    <InfoColumns items={homeDelivery} />
+                    <div className="delivery-columns">
+                        {homeDeliveryContent.map((content, index) => ( content && (
+                        <article key={index} className="delivery-column">
+                            <div dangerouslySetInnerHTML={{ __html: content }} />
+                        </article>
+                        ) ))}
+                    </div>
                 </div>
             </section>
 
@@ -137,7 +97,13 @@ export default function Delivery() {
             <section className="delivery-section delivery-section-alt">
                 <div className="container">
                     <button className="delivery-btn">Free Warehouse Pick Up</button>
-                    <InfoColumns items={warehousePickUp} />
+                    <div className="delivery-columns">
+                        {warehousePickupContent.map((content, index) => ( content && (
+                        <article key={index} className="delivery-column">
+                            <div dangerouslySetInnerHTML={{ __html: content }} />
+                        </article>
+                        ) ))}
+                    </div>
                 </div>
             </section>
         </main>
