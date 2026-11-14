@@ -395,7 +395,7 @@ max-height: 50vw;
 /* Stack the two halves */
 @media (max-width: 767px) {
   .cup {
-    padding: 16px;
+          padding: 16px 16px 0 16px;
   }
 
   .cup-dialog {
