@@ -294,14 +294,16 @@ transform: scaleX(1);
 /* z-index: 2; */
 }
 .product-form-scroll-div p a {
-    display: inline-block;
-    color: #9FB0FF;
+    color: #e3e6f5;
     transition: all .3s ease-in-out;
+    display: inline-block;
+    text-decoration: none;
+    cursor: default;
 }
 
-.product-form-scroll-div p a:hover{
+/* .product-form-scroll-div p a:hover{
      color: #ff4d5a;
-}
+} */
 /* ===== Responsive ===== */
 @media (max-width: 1199px) {
   .lrm-dialog {
