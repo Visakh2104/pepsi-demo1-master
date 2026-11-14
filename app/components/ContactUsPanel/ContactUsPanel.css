@@ -275,6 +275,7 @@ text-decoration: none;
 }
 .cup-info .email a {
     text-decoration: underline;
+        color: #9FB0FF;
 }
 .cup-info .email a:hover{
     color: #FF5A66;
