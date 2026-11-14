@@ -63,7 +63,10 @@ export default async function Delivery() {
                         <span aria-current="page">{pageTitle}</span>
                     </nav>
 
-                    <h1>{pageTitle}</h1>
+                    <h1>
+                        <span>Delivery or</span>
+                        Warehouse Pick Up
+                    </h1>
 
                     <p>
                         We are offering home delivery as well as warehouse pick up in order
