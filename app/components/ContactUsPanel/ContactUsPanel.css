@@ -1,0 +1,353 @@
+/* ===== Overlay: blurred dark backdrop, centers the dialog ===== */
+.cup {
+  --cup-red: #c8102e;
+  --cup-black: #000000;
+  --cup-text: #ffffff;
+  --cup-muted: #c9c9c9;
+  --cup-blue: #1e2fff;
+  --cup-link: #8c9eff;
+  --cup-line: #2a2a2a;
+
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  color: var(--cup-text);
+
+  /* Closed: hidden after the slide-down finishes */
+  visibility: hidden;
+  transition: visibility 0s linear 1.6s;
+}
+
+.cup.is-open {
+  visibility: visible;
+  transition: visibility 0s linear 0s;
+}
+
+/* Backdrop: dark and blurred, so the page text behind does not show through */
+.cup::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.78);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  opacity: 0;
+  transition: opacity 1.6s ease;
+}
+
+.cup.is-open::before {
+  opacity: 1;
+}
+
+/* ===== Dialog: starts below the screen, slides up to the centre ===== */
+.cup-dialog {
+  position: relative;
+  display: flex;
+  width: 100%;
+  max-width: 1000px;
+  max-height: calc(100vh - 48px);
+  background-color: var(--cup-black);
+  border-radius: 24px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.7);
+
+  transform: translateY(110vh);
+  transition: transform 1.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cup.is-open .cup-dialog {
+  transform: translateY(0);
+}
+
+/* Clipping wrapper: keeps the rounded corners and the scroll inside the dialog */
+.cup-inner {
+  display: flex;
+  width: 100%;
+  max-height: inherit;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border-radius: 24px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--cup-red) transparent;
+}
+
+/* Close button: sits just outside the top-right corner, as in the design */
+.cup-close {
+  position: absolute;
+  top: -18px;
+  right: -18px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background-color: #ffffff;
+  color: var(--cup-red);
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s ease;
+}
+
+.cup-close:hover {
+  transform: rotate(90deg);
+}
+
+/* ===== Left: red block with curved bottom-right corner ===== */
+.cup-left {
+  display: flex;
+  flex: 0 0 42%;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 56px 48px 40px;
+  background-color: var(--cup-red);
+  border-radius: 0 0 160px 0;
+}
+
+.cup-left > span {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.cup-left > h2 {
+  margin: 16px 0 16px;
+  font-size: 34px;
+  font-weight: 900;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.cup-left > p {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+
+.cup-social {
+  display: flex;
+  gap: 16px;
+  margin-top: 48px;
+}
+
+.cup-social a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: var(--cup-text);
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.cup-social a:hover {
+  background-color: rgba(255, 255, 255, 0.18);
+}
+
+/* ===== Right: company info ===== */
+.cup-right {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  min-width: 0;
+  padding: 48px 40px 40px;
+}
+
+.cup-right h3 {
+  margin: 0 0 20px;
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.cup-map {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 220px;
+  margin-bottom: 24px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #dfe7f1 0%, #bcd0e3 100%);
+  color: #1b1b1b;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.cup-map span {
+  padding: 8px 16px;
+  border-radius: 999px;
+  background-color: #000000;
+  color: #ffffff;
+}
+
+.cup-info {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cup-info li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.cup-info li > svg {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  color: var(--cup-link);
+}
+
+.cup-info li > div {
+  min-width: 0;
+}
+
+.cup-info a {
+  color: var(--cup-text);
+  text-decoration: underline;
+}
+
+.cup-info a:hover {
+  color: var(--cup-link);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 1199px) {
+  .cup-dialog {
+    max-width: 900px;
+  }
+
+  .cup-left {
+    flex-basis: 40%;
+    padding: 48px 36px 36px;
+  }
+
+  .cup-left > h2 {
+    font-size: 30px;
+  }
+
+  .cup-right {
+    padding: 40px 32px 32px;
+  }
+}
+
+@media (max-width: 991px) {
+  .cup-dialog {
+    max-width: 720px;
+  }
+
+  .cup-left {
+    flex-basis: 44%;
+    padding: 40px 28px 32px;
+  }
+
+  .cup-left > h2 {
+    font-size: 26px;
+  }
+
+  .cup-right {
+    padding: 32px 24px 28px;
+  }
+
+  .cup-map {
+    height: 180px;
+  }
+}
+
+/* Stack the two halves */
+@media (max-width: 767px) {
+  .cup {
+    padding: 16px;
+  }
+
+  .cup-dialog {
+    max-width: 560px;
+  }
+
+  .cup-inner {
+    flex-direction: column;
+  }
+
+  .cup-left {
+    flex: 0 0 auto;
+    border-radius: 0 0 96px 0;
+    padding: 36px 28px 40px;
+  }
+
+  .cup-social {
+    margin-top: 28px;
+  }
+
+  .cup-right {
+    padding: 28px 24px 32px;
+  }
+}
+
+@media (max-width: 575px) {
+  .cup-close {
+    top: -12px;
+    right: -6px;
+    width: 36px;
+    height: 36px;
+    font-size: 22px;
+  }
+
+  .cup-left > h2 {
+    font-size: 24px;
+  }
+
+  .cup-left > p {
+    font-size: 13px;
+  }
+
+  .cup-right h3 {
+    font-size: 19px;
+  }
+
+  .cup-map {
+    height: 160px;
+  }
+}
+
+@media (max-width: 480px) {
+  .cup {
+    padding: 12px;
+  }
+
+  .cup-left {
+    padding: 32px 22px 32px;
+    border-radius: 0 0 72px 0;
+  }
+
+  .cup-left > h2 {
+    font-size: 21px;
+  }
+
+  .cup-right {
+    padding: 24px 18px 26px;
+  }
+
+  .cup-info li {
+    font-size: 12px;
+  }
+}

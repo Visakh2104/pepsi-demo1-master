@@ -1,0 +1,436 @@
+/* ===== Overlay: blurred backdrop, centers the dialog ===== */
+.lrm {
+  --lrm-bg: #070a2e;
+  --lrm-field-bg: #050827;
+  --lrm-accent: #ff4d5a;
+  --lrm-blue: #1e2fff;
+  --lrm-link: #8c9eff;
+  --lrm-border: #6b78ff;
+  --lrm-text: #ffffff;
+
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background-color: rgba(0, 0, 0, 0.55);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: var(--lrm-text);
+
+  /* Closed: invisible, hidden after the slide-down finishes */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.9s ease, visibility 0s linear 0.9s;
+}
+
+p, label, input, textarea, a, button {
+      font-family: Inter, sans-serif;
+}
+input, textarea{
+    font-weight: 500;
+    font-size: 15px;
+    color: #fff;
+}
+.lrm.is-open {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.6s ease, visibility 0s linear 0s;
+}
+
+/* ===== Dialog: starts below the screen, slides up to the center ===== */
+html {
+  scrollbar-gutter: stable;
+}
+
+.lrm-dialog {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1111px;
+  max-height: calc(100vh - 48px);
+    padding: 55px 55px 55px;
+    
+  overflow: hidden;              /* add this; remove the commented overflow-y line */
+  border: 1px solid var(--lrm-border);
+  border-radius: 24px;
+  background-color: var(--lrm-bg);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.7);
+
+  transform: translateY(110vh);
+  transition: transform 2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.product-form-scroll-div{
+
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: 70vh;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  padding-right: 15px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.product-form-scroll-div::-webkit-scrollbar{
+    width: 6px;
+    height: 100%;
+    border-radius: 20px;
+}
+
+.product-form-scroll-div::-webkit-scrollbar-thumb{
+ border-radius: 20px;
+ background: #1e2fff;
+}
+
+.product-form-scroll-div::-webkit-scrollbar-track{
+background: #1e31ff5b;    
+}
+
+.lrm.is-open .lrm-dialog {
+  transform: translateY(0);
+    transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.product-form-scroll-div p span {
+    display: block;
+}
+.product-form-scroll-div p{
+    line-height: 1.6;
+        color: #E3E6F5;
+        font-size: 18px;
+}
+/* Close button */
+.lrm-close {
+    border: 1px solid var(--lrm-border);
+    width: 30px;
+    height: 30px;
+    color: var(--lrm-text);
+    cursor: pointer;
+    background: none;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    font-size: 21px;
+    line-height: 1;
+    transition: background-color .3s, border-color .3s;
+    display: flex;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.lrm-close:hover {
+border-color: #c8002d;
+    background: #c8002d;
+}
+
+/* ===== Text ===== */
+.lrm-dialog h2 {
+  margin: 0 0 16px;
+  /* padding-right: 56px; */
+  font-size: 33px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-transform: uppercase;
+  font-family: "Unbounded", sans-serif;
+}
+
+.lrm-dialog > p {
+  margin: 0 0 32px;
+  color: #B8B8C4;
+  font-size: 19px;
+  line-height: 1.6;
+}
+
+.lrm-dialog > p a {
+  color: var(--lrm-link);
+  font-weight: 700;
+  text-decoration: underline;
+    text-decoration: underline;
+  text-decoration-color: var(--lrm-link);
+  text-underline-offset: 3px;
+  transition: color 0.3s ease, text-decoration-color 0.3s ease;
+}
+.lrm-dialog > p a:hover {
+  color: #FF5A66;
+  text-decoration-color: #FF5A66;
+}
+
+/* ===== Form ===== */
+.lrm-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-top: 30px;
+}
+
+.lrm-row {
+  display: flex;
+  gap: 24px;
+}
+
+.lrm-field {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  min-width: 0;
+  gap: 8px;
+}
+
+.lrm-field label {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.lrm-field input,
+.lrm-field textarea,
+.lrm-phone select {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--lrm-border);
+  border-radius: 12px;
+  background-color: var(--lrm-field-bg);
+  color: #B8B8C4;
+ font-family: Inter, sans-serif;
+  font-size: 15px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.lrm-field input::placeholder ,.lrm-field textarea::placeholder , .lrm-phone select::placeholder  {color:#6B6B7A ;}
+/* #6B6B7A */
+.lrm-field input:focus,
+.lrm-field textarea:focus,
+.lrm-phone:focus-within,
+.lrm-phone select:focus {
+  outline: none;
+  border-color: var(--lrm-link);
+  box-shadow: 0 0 0 3px rgba(140, 158, 255, 0.25);
+}
+
+.lrm-field textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+/* Phone: one bordered box holding [country code] + [number] */
+.lrm-phone {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+  padding: 6px;
+  border: 1px solid var(--lrm-border);
+  border-radius: 12px;
+  background-color: var(--lrm-field-bg);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.lrm-phone select {
+  flex: 0 0 100px;
+  width: auto;
+  padding: 8px 10px;
+  border-radius: 8px;
+}
+
+.lrm-phone input {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.lrm-phone input:focus {
+  box-shadow: none;
+}
+
+/* Submit */
+.lrm-submit {
+  align-self: flex-start;
+    padding: 18px 40px;
+  border: 0;
+  border-radius: 999px;
+  background-color: var(--lrm-blue);
+  color: var(--lrm-text);
+font-family: "Unbounded", sans-serif;
+  font-size: 18px;
+  font-weight:700;
+  text-transform: uppercase;
+  cursor: pointer;
+transition: transform .2s;
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+    position: relative;
+    overflow: hidden;
+}
+.lrm-submit::before{
+        content: "";
+    transform-origin: 0;
+    z-index: -1;
+    background: #c8002d;
+    border-radius: 50px;
+    width: 100%;
+    height: 100%;
+    transition: transform .5s cubic-bezier(.4, 0, .2, 1);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    transform: scaleX(0);
+
+}
+.lrm-submit:hover{
+    /* background: transparent; */
+    /* z-index: 3; */
+}
+.lrm-submit:hover::before {
+transform: scaleX(1);
+/* z-index: 2; */
+}
+.product-form-scroll-div p a {
+    display: inline-block;
+}
+/* ===== Responsive ===== */
+@media (max-width: 1199px) {
+  .lrm-dialog {
+    max-width: 960px;
+    /* padding: 40px; */
+  }
+
+  .lrm-row {
+    gap: 18px;
+  }
+
+.lrm-submit{ 
+    font-size: 16px;
+    padding: 16 32px;
+}
+.lrm-dialog h2{font-size: 26px;}
+
+}
+
+@media (max-width: 991px) {
+  .lrm-dialog {
+    max-width: 720px;
+        padding: 45px 45px 45px;
+  }
+.lrm-close{
+top: 12px;
+    right: 12px;
+}
+  /* 2 fields per row */
+  .lrm-row {
+    flex-wrap: wrap;
+  }
+
+  .lrm-field {
+    flex: 1 1 calc(50% - 9px);
+  }
+
+  .lrm-row .lrm-field:last-child {
+    flex-basis: 100%;
+  }
+
+.product-form-scroll-div p {
+    font-size: 16px;}
+
+
+}
+
+@media (max-width: 767px) {
+  .lrm {
+    padding: 16px;
+  }
+
+  .lrm-dialog {
+    max-height: calc(100vh - 32px);
+        padding: 45px 45px;
+    border-radius: 20px;
+  }
+
+  .lrm-row {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .lrm-field,
+  .lrm-row .lrm-field:last-child {
+    flex: 1 1 auto;
+  }
+
+  .lrm-submit {
+    align-self: stretch;
+  }
+
+    .lrm-dialog h2 {
+        font-size: 22px;
+    }
+
+.product-form-scroll-div p {
+    font-size: 16px;}
+.lrm-submit {
+        padding: 12px 32px;
+    }
+
+
+}
+
+@media (max-width: 575px) {
+  .lrm-dialog {
+          padding: 44px 44px;
+  }
+
+  .lrm-dialog h2 {
+    font-size: 20px;
+  }
+
+
+.product-form-scroll-div p span {
+    display: inline;
+}
+
+.lrm-field input{
+         padding: 8px 12px;    border-radius: 10px;
+}
+  .lrm-phone input {
+    padding: 0px 5px !important;
+}
+
+.lrm-phone select {
+    border-radius: 8px;
+    flex: 0 0 82px;
+    padding: 5px 10px;
+}
+}
+
+@media (max-width: 480px) {
+  .lrm-dialog h2 {
+           font-size: 19px;
+  }
+
+  .lrm-phone select {
+    flex-basis: 68px;
+  }
+
+.lrm-submit {
+        padding: 12px 32px;
+        font-size: 15px;
+    }
+
+.product-form-scroll-div{padding-right: 12px;}
+    .lrm-dialog {
+        padding: 44px 26px 40px;
+    }
+        .product-form-scroll-div p {
+        font-size: 15px;
+    }
+.lrm-field label {
+    font-size: 15px;
+}
+
+}

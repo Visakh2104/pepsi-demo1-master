@@ -12,6 +12,7 @@ import SmoothScroll from "../components/SmoothScroll";
 import "./products.css";
 import PageLoader from "../components/PageLoader";
 import ProductRequestPopup from "../product-popup/ProductRequestPopup";
+import ListingRequestModal from "../components/ListingRequestModal/ListingRequestModal";
 
 export default function ProductsPage() {
     const [filters, setFilters] = useState<FilterValues>({
@@ -138,7 +139,8 @@ export default function ProductsPage() {
                 <Footer />
 
                 <>
-                  <ProductRequestPopup />
+                  {/* <ProductRequestPopup /> */}
+                  <ListingRequestModal />
                 </>
             </div>
         </>
