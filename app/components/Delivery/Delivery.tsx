@@ -36,7 +36,6 @@ async function getDeliveryPage(): Promise<DeliveryPageResponse | null> {
 }
 
 export default async function Delivery() {
-    await connection();
     const data = await getDeliveryPage();
 
     const pageTitle = data?.title || "Delivery or Warehouse Pick Up";

@@ -1,4 +1,5 @@
 // import Delivery from "@/app/components/Delivery/Delivery";
+import { Suspense } from "react";
 import Delivery from "../components/Delivery/Delivery";
 import Footer from "../components/footer/Footer";
 import Header from "../components/header/Header";
@@ -12,7 +13,17 @@ export default function DeliveryPage() {
 
     <>
         <Header />
-         <Delivery />
+         <Suspense
+                fallback={
+                    <main className="delivery-page">
+                        <div className="container">
+                            Loading delivery information...
+                        </div>
+                    </main>
+                }
+            >
+                <Delivery />
+          </Suspense>
           <Footer />
     </>
   )
