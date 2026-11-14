@@ -10,14 +10,14 @@ export default function ProductRequestPopup() {
 
   // Open the panel once each time the user scrolls down to the bottom of the page.
   useEffect(() => {
-    const onScroll = () => {
+    const onScroll = () => { 
       const reachedBottom =
         window.innerHeight + window.scrollY >=
         document.documentElement.scrollHeight - 8;
 
       if (reachedBottom && !atBottomRef.current) {
         setOpen(true);
-      }
+      } 
       atBottomRef.current = reachedBottom;
     };
 
