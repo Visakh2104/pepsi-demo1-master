@@ -220,7 +220,14 @@ export default function Header() {
                                             <Link
                                                 href={item.href}
                                                 className={pathname === item.href ? "active" : ""}
-                                                onClick={() => setOpen(false)}
+                                                onClick={(e) => {
+                                                    if (item.href === "/contact") {
+                                                        e.preventDefault();
+                                                        window.dispatchEvent(new Event("open-contact-popup"));
+                                                    }
+
+                                                    setOpen(false);
+                                                }}
                                             >
                                                 {item.label}
                                             </Link>

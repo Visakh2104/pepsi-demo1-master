@@ -1,14 +1,11 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import ContactUsPanel from "@/app/components/ContactUsPanel/ContactUsPanel";
+import { useEffect } from "react";
 
 export default function ContactPage() {
-  const router = useRouter();
+    useEffect(() => {
+        window.dispatchEvent(new Event("open-contact-popup"));
+    }, []);
 
-  return (
-    <main style={{ minHeight: "100vh", background: "#000" }}>
-      <ContactUsPanel openOnMount onClose={() => router.back()} />
-    </main>
-  );
+    return null;
 }

@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import PepsiFont from "next/font/local";
 import HelveticaFont from "next/font/local";
+import GlobalContactPopup from "./components/GlobalContactPopup/GlobalContactPopup";
 
 const pepsifont = PepsiFont({
   src : [
@@ -67,7 +68,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} ${pepsifont.variable} ${helveticafont.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">{children} <GlobalContactPopup /> </body>
+
     </html>
   );
 }
